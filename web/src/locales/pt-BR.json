@@ -156,10 +156,18 @@
     "yearsTracked": "Anos Rastreados",
     "byGender": "Por Gênero",
     "byYear": "Por Ano de Desaparecimento",
-    "loadError": "Erro ao carregar estatísticas"
+    "loadError": "Erro ao carregar estatísticas",
+    "totalHomeless": "Moradores de Rua"
   },
   "search": {
     "placeholder": "Buscar desaparecidos..."
+  },
+  "homeless": {
+    "title": "Quero Ser Encontrado",
+    "register": "Novo Cadastro",
+    "formTitle": "Cadastrar Pessoa",
+    "empty": "Nenhum cadastro encontrado",
+    "saveError": "Erro ao salvar cadastro"
   },
   "sighting": {
     "title": "Avistamentos",

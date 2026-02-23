@@ -173,6 +173,41 @@ export interface CreateSightingInput {
   observation: string;
 }
 
+export interface HomelessResponse {
+  id: string;
+  name: string;
+  nickname?: string;
+  birth_date?: string;
+  age: number;
+  gender: string;
+  eyes: string;
+  hair: string;
+  skin: string;
+  photo_url?: string;
+  lat: number;
+  lng: number;
+  slug: string;
+  created_at: string;
+}
+
+export interface CreateHomelessInput {
+  name: string;
+  nickname?: string;
+  birth_date?: string;
+  gender: string;
+  eyes: string;
+  hair: string;
+  skin: string;
+  photo_url?: string;
+  lat: number;
+  lng: number;
+}
+
+export interface HomelessStatsResponse {
+  total: number;
+  by_gender: GenderStatDTO[];
+}
+
 export const api = {
   health: () =>
     request<HealthResponse>("/api/v1/health", { skipAuth: true }),
@@ -270,4 +305,22 @@ export const api = {
 
   getSighting: (id: string) =>
     request<SightingResponse>(`/api/v1/sightings/${id}`, { skipAuth: true }),
+
+  // --- Homeless ---
+
+  listHomeless: () =>
+    request<HomelessResponse[]>("/api/v1/homeless", { skipAuth: true }),
+
+  getHomeless: (id: string) =>
+    request<HomelessResponse>(`/api/v1/homeless/${id}`, { skipAuth: true }),
+
+  createHomeless: (data: CreateHomelessInput) =>
+    request<HomelessResponse>("/api/v1/homeless", {
+      method: "POST",
+      body: JSON.stringify(data),
+      skipAuth: true,
+    }),
+
+  getHomelessStats: () =>
+    request<HomelessStatsResponse>("/api/v1/homeless/stats", { skipAuth: true }),
 };

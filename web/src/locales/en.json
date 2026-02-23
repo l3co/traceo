@@ -156,10 +156,18 @@
     "yearsTracked": "Years Tracked",
     "byGender": "By Gender",
     "byYear": "By Year of Disappearance",
-    "loadError": "Failed to load statistics"
+    "loadError": "Failed to load statistics",
+    "totalHomeless": "Homeless People"
   },
   "search": {
     "placeholder": "Search missing persons..."
+  },
+  "homeless": {
+    "title": "Want To Be Found",
+    "register": "New Registration",
+    "formTitle": "Register Person",
+    "empty": "No registrations found",
+    "saveError": "Failed to save registration"
   },
   "sighting": {
     "title": "Sightings",

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Users, Baby, MapPin } from "lucide-react";
+import { Users, Baby, MapPin, Heart } from "lucide-react";
 import {
   PieChart,
   Pie,
@@ -13,7 +13,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { api, type StatsResponse } from "@/shared/lib/api";
+import { api, type StatsResponse, type HomelessStatsResponse } from "@/shared/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getLabel, GENDER_OPTIONS } from "@/features/missing/constants";
 
@@ -24,14 +24,18 @@ export default function DashboardPage() {
   const lang = i18n.language;
 
   const [stats, setStats] = useState<StatsResponse | null>(null);
+  const [homelessStats, setHomelessStats] = useState<HomelessStatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .getMissingStats()
-      .then(setStats)
-      .catch(() => {})
-      .finally(() => setLoading(false));
+    Promise.all([
+      api.getMissingStats().catch(() => null),
+      api.getHomelessStats().catch(() => null),
+    ]).then(([missing, homeless]) => {
+      if (missing) setStats(missing);
+      if (homeless) setHomelessStats(homeless);
+      setLoading(false);
+    });
   }, []);
 
   if (loading) {
@@ -66,7 +70,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">{t("dashboard.title")}</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -100,6 +104,18 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold">{stats.by_year.length}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              {t("dashboard.totalHomeless")}
+            </CardTitle>
+            <Heart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold">{homelessStats?.total ?? 0}</p>
           </CardContent>
         </Card>
       </div>

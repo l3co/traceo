@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Home, User, Key, LogOut, Search, BarChart3 } from "lucide-react";
+import { Home, User, Key, LogOut, Search, BarChart3, Heart } from "lucide-react";
 import { useAuth } from "@/shared/contexts/AuthContext";
 import { LanguageSwitcher } from "@/shared/components/LanguageSwitcher";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ const navItems = [
   { path: "/", icon: Home, labelKey: "nav.home" },
   { path: "/missing", icon: Search, labelKey: "nav.missing" },
   { path: "/dashboard", icon: BarChart3, labelKey: "nav.dashboard" },
+  { path: "/homeless", icon: Heart, labelKey: "nav.homeless" },
   { path: "/profile", icon: User, labelKey: "nav.profile" },
   { path: "/password", icon: Key, labelKey: "nav.password" },
 ];
