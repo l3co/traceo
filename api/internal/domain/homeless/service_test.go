@@ -29,6 +29,10 @@ func (m *mockNotifier) NotifyNewHomeless(_ context.Context, name, _, _, _ string
 	return nil
 }
 
+func (m *mockNotifier) NotifyPotentialMatch(_ context.Context, _ string, _ float64, _ string) error {
+	return nil
+}
+
 func (m *mockNotifier) CallCount() int {
 	m.mu.Lock()
 	defer m.mu.Unlock()

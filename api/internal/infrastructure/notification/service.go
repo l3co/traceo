@@ -13,6 +13,15 @@ func NewService(email *EmailSender) *Service {
 	return &Service{email: email}
 }
 
+func (s *Service) NotifyPotentialMatch(_ context.Context, missingName string, score float64, analysis string) error {
+	slog.Info("potential match found",
+		"missing_name", missingName,
+		"score", score,
+		"analysis_length", len(analysis),
+	)
+	return nil
+}
+
 func (s *Service) NotifyNewHomeless(_ context.Context, name, birthDate, photoURL, id string) error {
 	slog.Info("new homeless registered",
 		"name", name,

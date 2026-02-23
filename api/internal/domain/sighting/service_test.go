@@ -31,6 +31,10 @@ func (m *mockNotifier) NotifyNewHomeless(_ context.Context, _, _, _, _ string) e
 	return nil
 }
 
+func (m *mockNotifier) NotifyPotentialMatch(_ context.Context, _ string, _ float64, _ string) error {
+	return nil
+}
+
 func (m *mockNotifier) CallCount() int {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -104,6 +108,12 @@ func (m *mockMissingRepo) CountByYear(_ context.Context) ([]missing.YearStat, er
 func (m *mockMissingRepo) CountChildren(_ context.Context) (int64, error) { return 0, nil }
 func (m *mockMissingRepo) FindLocations(_ context.Context, l int) ([]missing.LocationPoint, error) {
 	return nil, nil
+}
+func (m *mockMissingRepo) FindCandidates(_ context.Context, _ missing.CandidateFilter) ([]*missing.Missing, error) {
+	return nil, nil
+}
+func (m *mockMissingRepo) UpdateAgeProgressionURLs(_ context.Context, _ string, _ []string) error {
+	return nil
 }
 
 // --- Helpers ---

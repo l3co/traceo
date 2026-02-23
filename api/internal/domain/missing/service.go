@@ -121,6 +121,11 @@ func (s *Service) Update(ctx context.Context, id, userID string, input *UpdateIn
 	return m, nil
 }
 
+func (s *Service) UpdateEntity(ctx context.Context, m *Missing) error {
+	m.UpdatedAt = time.Now()
+	return s.repo.Update(ctx, m)
+}
+
 func (s *Service) Delete(ctx context.Context, id, userID string) error {
 	m, err := s.repo.FindByID(ctx, id)
 	if err != nil {

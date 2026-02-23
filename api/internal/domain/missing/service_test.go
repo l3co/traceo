@@ -149,6 +149,24 @@ func (m *mockRepo) FindLocations(_ context.Context, limit int) ([]missing.Locati
 	return result, nil
 }
 
+func (m *mockRepo) FindCandidates(_ context.Context, _ missing.CandidateFilter) ([]*missing.Missing, error) {
+	var result []*missing.Missing
+	for _, item := range m.items {
+		result = append(result, item)
+	}
+	return result, nil
+}
+
+func (m *mockRepo) UpdateAgeProgressionURLs(_ context.Context, id string, urls []string) error {
+	item, ok := m.items[id]
+	if !ok {
+		return missing.ErrMissingNotFound
+	}
+	_ = item
+	_ = urls
+	return nil
+}
+
 // --- Helpers ---
 
 func validInput() *missing.CreateInput {
