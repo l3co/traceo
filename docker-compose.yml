@@ -15,6 +15,9 @@ services:
       - FIREBASE_AUTH_EMULATOR_HOST=firebase:9099
       - STORAGE_EMULATOR_HOST=firebase:9199
       - ENVIRONMENT=development
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - RESEND_FROM_EMAIL=${RESEND_FROM_EMAIL:-noreply@traceo.me}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
     depends_on:
       firebase:
         condition: service_healthy
@@ -33,6 +36,8 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8080
       - VITE_FIREBASE_PROJECT_ID=traceo-dev
+      - VITE_FIREBASE_API_KEY=fake-api-key
+      - VITE_FIREBASE_AUTH_DOMAIN=localhost
     depends_on:
       - api
     networks:
