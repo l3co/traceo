@@ -160,5 +160,18 @@
   },
   "search": {
     "placeholder": "Search missing persons..."
+  },
+  "sighting": {
+    "title": "Sightings",
+    "noSightings": "No sightings reported",
+    "reportButton": "Report Sighting",
+    "formTitle": "Report Sighting",
+    "formDescription": "Tell us where and when you saw {{name}}.",
+    "observation": "Observation",
+    "observationPlaceholder": "Describe where and how the person was seen...",
+    "useMyLocation": "Use my location",
+    "submit": "Submit Sighting",
+    "submitError": "Failed to report sighting",
+    "submitSuccess": "Sighting reported successfully!"
   }
 }

@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { X, MapPin, Calendar, User, FileText } from "lucide-react";
+import { X, MapPin, Calendar, User, FileText, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import type { MissingResponse } from "@/shared/lib/api";
@@ -11,6 +12,8 @@ import {
   SKIN_OPTIONS,
   STATUS_OPTIONS,
 } from "../constants";
+import SightingForm from "@/features/sighting/components/SightingForm";
+import SightingTimeline from "@/features/sighting/components/SightingTimeline";
 
 interface MissingDetailModalProps {
   item: MissingResponse;
@@ -23,6 +26,8 @@ export default function MissingDetailModal({
 }: MissingDetailModalProps) {
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
+  const [showSightingForm, setShowSightingForm] = useState(false);
+  const [sightingKey, setSightingKey] = useState(0);
 
   const isFound = item.status === "found";
 
@@ -202,6 +207,34 @@ export default function MissingDetailModal({
                 </span>
               </div>
             </>
+          )}
+
+          <Separator />
+
+          <SightingTimeline key={sightingKey} missingId={item.id} />
+
+          {!showSightingForm ? (
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setShowSightingForm(true)}
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              {t("sighting.reportButton")}
+            </Button>
+          ) : (
+            <div className="rounded-lg border p-4">
+              <h3 className="font-semibold mb-3">{t("sighting.formTitle")}</h3>
+              <SightingForm
+                missingId={item.id}
+                missingName={item.name}
+                onSuccess={() => {
+                  setShowSightingForm(false);
+                  setSightingKey((k) => k + 1);
+                }}
+                onCancel={() => setShowSightingForm(false)}
+              />
+            </div>
           )}
         </div>
       </div>

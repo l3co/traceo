@@ -158,6 +158,21 @@ export interface LocationsResponse {
   locations: LocationPointDTO[];
 }
 
+export interface SightingResponse {
+  id: string;
+  missing_id: string;
+  lat: number;
+  lng: number;
+  observation: string;
+  created_at: string;
+}
+
+export interface CreateSightingInput {
+  lat: number;
+  lng: number;
+  observation: string;
+}
+
 export const api = {
   health: () =>
     request<HealthResponse>("/api/v1/health", { skipAuth: true }),
@@ -238,4 +253,21 @@ export const api = {
     request<LocationsResponse>(`/api/v1/missing/locations?limit=${limit}`, {
       skipAuth: true,
     }),
+
+  // --- Sightings ---
+
+  createSighting: (missingId: string, data: CreateSightingInput) =>
+    request<SightingResponse>(`/api/v1/missing/${missingId}/sightings`, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  getSightings: (missingId: string) =>
+    request<SightingResponse[]>(
+      `/api/v1/missing/${missingId}/sightings`,
+      { skipAuth: true }
+    ),
+
+  getSighting: (id: string) =>
+    request<SightingResponse>(`/api/v1/sightings/${id}`, { skipAuth: true }),
 };

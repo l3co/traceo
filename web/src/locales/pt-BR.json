@@ -160,5 +160,18 @@
   },
   "search": {
     "placeholder": "Buscar desaparecidos..."
+  },
+  "sighting": {
+    "title": "Avistamentos",
+    "noSightings": "Nenhum avistamento registrado",
+    "reportButton": "Informar Avistamento",
+    "formTitle": "Registrar Avistamento",
+    "formDescription": "Informe onde e quando você viu {{name}}.",
+    "observation": "Observação",
+    "observationPlaceholder": "Descreva onde e como a pessoa foi vista...",
+    "useMyLocation": "Usar minha localização",
+    "submit": "Enviar Avistamento",
+    "submitError": "Erro ao registrar avistamento",
+    "submitSuccess": "Avistamento registrado com sucesso!"
   }
 }
