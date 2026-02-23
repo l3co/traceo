@@ -37,6 +37,7 @@ type CreateMissingRequest struct {
 	PhotoURL            string  `json:"photo_url,omitempty"`
 	Lat                 float64 `json:"lat"`
 	Lng                 float64 `json:"lng"`
+	Address             string  `json:"address,omitempty" validate:"omitempty,max=500"`
 	EventReport         string  `json:"event_report,omitempty" validate:"omitempty,max=2000"`
 	TattooDescription   string  `json:"tattoo_description,omitempty" validate:"omitempty,max=500"`
 	ScarDescription     string  `json:"scar_description,omitempty" validate:"omitempty,max=500"`
@@ -56,6 +57,7 @@ type UpdateMissingRequest struct {
 	PhotoURL            string  `json:"photo_url,omitempty"`
 	Lat                 float64 `json:"lat"`
 	Lng                 float64 `json:"lng"`
+	Address             string  `json:"address,omitempty" validate:"omitempty,max=500"`
 	Status              string  `json:"status,omitempty"`
 	EventReport         string  `json:"event_report,omitempty" validate:"omitempty,max=2000"`
 	TattooDescription   string  `json:"tattoo_description,omitempty" validate:"omitempty,max=500"`
@@ -78,6 +80,7 @@ type MissingResponse struct {
 	PhotoURL            string  `json:"photo_url,omitempty"`
 	Lat                 float64 `json:"lat"`
 	Lng                 float64 `json:"lng"`
+	Address             string  `json:"address,omitempty"`
 	Status              string  `json:"status"`
 	EventReport         string  `json:"event_report,omitempty"`
 	TattooDescription   string  `json:"tattoo_description,omitempty"`
@@ -113,6 +116,7 @@ func toMissingResponse(m *missing.Missing) MissingResponse {
 		PhotoURL:          m.PhotoURL,
 		Lat:               m.Location.Lat,
 		Lng:               m.Location.Lng,
+		Address:           m.Location.Address,
 		Status:            string(m.Status),
 		EventReport:       m.EventReport,
 		TattooDescription: m.TattooDescription,
@@ -177,7 +181,7 @@ func (h *MissingHandler) Create(w http.ResponseWriter, r *http.Request) {
 		Hair:                missing.HairColor(req.Hair),
 		Skin:                missing.SkinColor(req.Skin),
 		PhotoURL:            req.PhotoURL,
-		Location:            missing.GeoPoint{Lat: req.Lat, Lng: req.Lng},
+		Location:            missing.GeoPoint{Lat: req.Lat, Lng: req.Lng, Address: req.Address},
 		EventReport:         httputil.SanitizeString(req.EventReport),
 		TattooDescription:   httputil.SanitizeString(req.TattooDescription),
 		ScarDescription:     httputil.SanitizeString(req.ScarDescription),
@@ -289,7 +293,7 @@ func (h *MissingHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Hair:                missing.HairColor(req.Hair),
 		Skin:                missing.SkinColor(req.Skin),
 		PhotoURL:            req.PhotoURL,
-		Location:            missing.GeoPoint{Lat: req.Lat, Lng: req.Lng},
+		Location:            missing.GeoPoint{Lat: req.Lat, Lng: req.Lng, Address: req.Address},
 		Status:              missing.Status(req.Status),
 		EventReport:         httputil.SanitizeString(req.EventReport),
 		TattooDescription:   httputil.SanitizeString(req.TattooDescription),

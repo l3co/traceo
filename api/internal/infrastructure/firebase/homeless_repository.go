@@ -35,6 +35,7 @@ type homelessDoc struct {
 	PhotoURL  string    `firestore:"photo_url,omitempty"`
 	Lat       float64   `firestore:"lat"`
 	Lng       float64   `firestore:"lng"`
+	Address   string    `firestore:"address,omitempty"`
 	Slug      string    `firestore:"slug"`
 	CreatedAt time.Time `firestore:"created_at"`
 	UpdatedAt time.Time `firestore:"updated_at"`
@@ -53,6 +54,7 @@ func toHomelessDoc(h *homeless.Homeless) homelessDoc {
 		PhotoURL:  h.PhotoURL,
 		Lat:       h.Location.Lat,
 		Lng:       h.Location.Lng,
+		Address:   h.Location.Address,
 		Slug:      h.Slug,
 		CreatedAt: h.CreatedAt,
 		UpdatedAt: h.UpdatedAt,
@@ -70,7 +72,7 @@ func toHomelessEntity(d homelessDoc) *homeless.Homeless {
 		Hair:      shared.HairColor(d.Hair),
 		Skin:      shared.SkinColor(d.Skin),
 		PhotoURL:  d.PhotoURL,
-		Location:  shared.GeoPoint{Lat: d.Lat, Lng: d.Lng},
+		Location:  shared.GeoPoint{Lat: d.Lat, Lng: d.Lng, Address: d.Address},
 		Slug:      d.Slug,
 		CreatedAt: d.CreatedAt,
 		UpdatedAt: d.UpdatedAt,

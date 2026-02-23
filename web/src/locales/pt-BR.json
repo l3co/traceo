@@ -270,6 +270,11 @@
     "noMissing": "Você não possui desaparecidos cadastrados.",
     "noSightings": "Nenhum avistamento registrado para seus desaparecidos."
   },
+  "location": {
+    "label": "Localização",
+    "placeholder": "Digite o endereço (ex: Av. Paulista, São Paulo)",
+    "useMyLocation": "Usar minha localização"
+  },
   "a11y": {
     "skipToContent": "Pular para o conteúdo"
   },

@@ -39,6 +39,7 @@ type missingDoc struct {
 	PhotoURL            string    `firestore:"photo_url,omitempty"`
 	Lat                 float64   `firestore:"lat"`
 	Lng                 float64   `firestore:"lng"`
+	Address             string    `firestore:"address,omitempty"`
 	Status              string    `firestore:"status"`
 	EventReport         string    `firestore:"event_report,omitempty"`
 	TattooDescription   string    `firestore:"tattoo_description,omitempty"`
@@ -68,6 +69,7 @@ func toMissingDoc(m *missing.Missing) missingDoc {
 		PhotoURL:            m.PhotoURL,
 		Lat:                 m.Location.Lat,
 		Lng:                 m.Location.Lng,
+		Address:             m.Location.Address,
 		Status:              string(m.Status),
 		EventReport:         m.EventReport,
 		TattooDescription:   m.TattooDescription,
@@ -96,7 +98,7 @@ func toMissingEntity(d missingDoc) *missing.Missing {
 		Hair:                missing.HairColor(d.Hair),
 		Skin:                missing.SkinColor(d.Skin),
 		PhotoURL:            d.PhotoURL,
-		Location:            missing.GeoPoint{Lat: d.Lat, Lng: d.Lng},
+		Location:            missing.GeoPoint{Lat: d.Lat, Lng: d.Lng, Address: d.Address},
 		Status:              missing.Status(d.Status),
 		EventReport:         d.EventReport,
 		TattooDescription:   d.TattooDescription,

@@ -270,6 +270,11 @@
     "noMissing": "You have no registered missing persons.",
     "noSightings": "No sightings reported for your missing persons."
   },
+  "location": {
+    "label": "Location",
+    "placeholder": "Enter address (e.g., Av. Paulista, São Paulo)",
+    "useMyLocation": "Use my location"
+  },
   "a11y": {
     "skipToContent": "Skip to content"
   },

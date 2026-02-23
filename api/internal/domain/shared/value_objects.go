@@ -132,6 +132,7 @@ func (s SkinColor) Label() string {
 // --- GeoPoint ---
 
 type GeoPoint struct {
-	Lat float64
-	Lng float64
+	Lat     float64
+	Lng     float64
+	Address string
 }

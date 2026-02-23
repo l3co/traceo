@@ -70,14 +70,15 @@ func (h *Homeless) Validate() error {
 // --- Input DTOs ---
 
 type CreateInput struct {
-	Name     string
-	Nickname string
+	Name      string
+	Nickname  string
 	BirthDate time.Time
-	Gender   shared.Gender
-	Eyes     shared.EyeColor
-	Hair     shared.HairColor
-	Skin     shared.SkinColor
-	PhotoURL string
-	Lat      float64
-	Lng      float64
+	Gender    shared.Gender
+	Eyes      shared.EyeColor
+	Hair      shared.HairColor
+	Skin      shared.SkinColor
+	PhotoURL  string
+	Lat       float64
+	Lng       float64
+	Address   string
 }

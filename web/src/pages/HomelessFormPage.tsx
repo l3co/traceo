@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { MapPin } from "lucide-react";
 import { api } from "@/shared/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import AddressInput, { type LocationData } from "@/shared/components/AddressInput";
 import {
   getLabel,
   GENDER_OPTIONS,
@@ -28,28 +28,15 @@ export default function HomelessFormPage() {
     hair: "",
     skin: "",
     photo_url: "",
-    lat: "",
-    lng: "",
+    lat: 0,
+    lng: 0,
+    address: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [geoLoading, setGeoLoading] = useState(false);
 
   const set = (field: string, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
-
-  const handleGetLocation = () => {
-    if (!navigator.geolocation) return;
-    setGeoLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        set("lat", String(pos.coords.latitude));
-        set("lng", String(pos.coords.longitude));
-        setGeoLoading(false);
-      },
-      () => setGeoLoading(false)
-    );
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,8 +53,9 @@ export default function HomelessFormPage() {
         hair: form.hair,
         skin: form.skin,
         photo_url: form.photo_url || undefined,
-        lat: parseFloat(form.lat) || 0,
-        lng: parseFloat(form.lng) || 0,
+        lat: form.lat,
+        lng: form.lng,
+        address: form.address || undefined,
       });
       navigate("/homeless");
     } catch {
@@ -190,33 +178,13 @@ export default function HomelessFormPage() {
         </div>
 
         <div className="space-y-2">
-          <Label>{t("missing.location")}</Label>
-          <div className="grid grid-cols-2 gap-4">
-            <Input
-              type="number"
-              step="any"
-              placeholder={t("missing.lat")}
-              value={form.lat}
-              onChange={(e) => set("lat", e.target.value)}
-            />
-            <Input
-              type="number"
-              step="any"
-              placeholder={t("missing.lng")}
-              value={form.lng}
-              onChange={(e) => set("lng", e.target.value)}
-            />
-          </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleGetLocation}
-            disabled={geoLoading}
-          >
-            <MapPin className="mr-2 h-4 w-4" />
-            {geoLoading ? t("common.loading") : t("sighting.useMyLocation")}
-          </Button>
+          <Label>{t("location.label")}</Label>
+          <AddressInput
+            value={form.address ? { address: form.address, lat: form.lat, lng: form.lng } : undefined}
+            onChange={(loc: LocationData) => {
+              setForm((prev) => ({ ...prev, address: loc.address, lat: loc.lat, lng: loc.lng }));
+            }}
+          />
         </div>
 
         {error && <p className="text-sm text-destructive">{error}</p>}

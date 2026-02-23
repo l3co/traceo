@@ -33,6 +33,7 @@ type CreateHomelessRequest struct {
 	PhotoURL  string  `json:"photo_url"`
 	Lat       float64 `json:"lat"`
 	Lng       float64 `json:"lng"`
+	Address   string  `json:"address,omitempty"`
 }
 
 type HomelessResponse struct {
@@ -48,13 +49,14 @@ type HomelessResponse struct {
 	PhotoURL  string  `json:"photo_url,omitempty"`
 	Lat       float64 `json:"lat"`
 	Lng       float64 `json:"lng"`
+	Address   string  `json:"address,omitempty"`
 	Slug      string  `json:"slug"`
 	CreatedAt string  `json:"created_at"`
 }
 
 type HomelessStatsResponse struct {
-	Total    int64              `json:"total"`
-	ByGender []GenderStatDTO    `json:"by_gender"`
+	Total    int64           `json:"total"`
+	ByGender []GenderStatDTO `json:"by_gender"`
 }
 
 func toHomelessResponse(h *homeless.Homeless) HomelessResponse {
@@ -75,6 +77,7 @@ func toHomelessResponse(h *homeless.Homeless) HomelessResponse {
 		PhotoURL:  h.PhotoURL,
 		Lat:       h.Location.Lat,
 		Lng:       h.Location.Lng,
+		Address:   h.Location.Address,
 		Slug:      h.Slug,
 		CreatedAt: h.CreatedAt.Format(time.RFC3339),
 	}
@@ -117,6 +120,7 @@ func (h *HomelessHandler) Create(w http.ResponseWriter, r *http.Request) {
 		PhotoURL:  req.PhotoURL,
 		Lat:       req.Lat,
 		Lng:       req.Lng,
+		Address:   req.Address,
 	}
 
 	result, err := h.service.Create(r.Context(), input)

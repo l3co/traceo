@@ -88,6 +88,7 @@ export interface MissingResponse {
   photo_url?: string;
   lat: number;
   lng: number;
+  address?: string;
   status: string;
   event_report?: string;
   tattoo_description?: string;
@@ -120,6 +121,7 @@ export interface CreateMissingInput {
   photo_url?: string;
   lat: number;
   lng: number;
+  address?: string;
   event_report?: string;
   tattoo_description?: string;
   scar_description?: string;
@@ -186,6 +188,7 @@ export interface HomelessResponse {
   photo_url?: string;
   lat: number;
   lng: number;
+  address?: string;
   slug: string;
   created_at: string;
 }
@@ -201,6 +204,7 @@ export interface CreateHomelessInput {
   photo_url?: string;
   lat: number;
   lng: number;
+  address?: string;
 }
 
 export interface AgeProgressionResponse {

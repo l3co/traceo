@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import AddressInput, { type LocationData } from "@/shared/components/AddressInput";
 import {
   GENDER_OPTIONS,
   EYE_OPTIONS,
@@ -63,6 +64,7 @@ const emptyForm: CreateMissingInput = {
   skin: "",
   lat: 0,
   lng: 0,
+  address: "",
   event_report: "",
   tattoo_description: "",
   scar_description: "",
@@ -99,6 +101,7 @@ export default function MissingFormPage() {
           skin: m.skin,
           lat: m.lat,
           lng: m.lng,
+          address: m.address || "",
           event_report: m.event_report || "",
           tattoo_description: m.tattoo_description || "",
           scar_description: m.scar_description || "",
@@ -297,27 +300,14 @@ export default function MissingFormPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="lat">{t("missing.latitude")}</Label>
-                <Input
-                  id="lat"
-                  type="number"
-                  step="any"
-                  value={form.lat}
-                  onChange={(e) => update("lat", parseFloat(e.target.value) || 0)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lng">{t("missing.longitude")}</Label>
-                <Input
-                  id="lng"
-                  type="number"
-                  step="any"
-                  value={form.lng}
-                  onChange={(e) => update("lng", parseFloat(e.target.value) || 0)}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label>{t("location.label")}</Label>
+              <AddressInput
+                value={form.address ? { address: form.address, lat: form.lat, lng: form.lng } : undefined}
+                onChange={(loc: LocationData) => {
+                  setForm((prev) => ({ ...prev, address: loc.address, lat: loc.lat, lng: loc.lng }));
+                }}
+              />
             </div>
 
             <div className="flex gap-4">
