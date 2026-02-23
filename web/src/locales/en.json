@@ -244,6 +244,21 @@
     "terms": "Terms of Use",
     "privacy": "Privacy"
   },
+  "choice": {
+    "title": "How can we help?",
+    "subtitle": "Choose the option that best describes your situation.",
+    "registerMissing": "Register a missing person",
+    "registerMissingDesc": "Register the details of a family member or acquaintance who is missing so they can be found.",
+    "wantToBeFound": "I want to be found",
+    "wantToBeFoundDesc": "If you are homeless and wish to reconnect with your family, register here."
+  },
+  "ageProgression": {
+    "title": "How they may look today",
+    "disclaimer": "AI-generated image — approximate projection.",
+    "original": "Original",
+    "projection": "Projection",
+    "noData": "No projections available yet."
+  },
   "heatmap": {
     "title": "Heatmap",
     "description": "Areas with the highest concentration of disappearances in Brazil."

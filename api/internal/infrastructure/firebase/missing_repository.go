@@ -44,6 +44,7 @@ type missingDoc struct {
 	TattooDescription   string    `firestore:"tattoo_description,omitempty"`
 	ScarDescription     string    `firestore:"scar_description,omitempty"`
 	WasChild            bool      `firestore:"was_child"`
+	AgeProgressionURLs  []string  `firestore:"age_progression_urls,omitempty"`
 	Slug                string    `firestore:"slug"`
 	NameLowercase       string    `firestore:"name_lowercase"`
 	CreatedAt           time.Time `firestore:"created_at"`
@@ -72,6 +73,7 @@ func toMissingDoc(m *missing.Missing) missingDoc {
 		TattooDescription:   m.TattooDescription,
 		ScarDescription:     m.ScarDescription,
 		WasChild:            m.WasChild,
+		AgeProgressionURLs:  m.AgeProgressionURLs,
 		Slug:                m.Slug,
 		NameLowercase:       m.NameLowercase,
 		CreatedAt:           m.CreatedAt,
@@ -100,6 +102,7 @@ func toMissingEntity(d missingDoc) *missing.Missing {
 		TattooDescription:   d.TattooDescription,
 		ScarDescription:     d.ScarDescription,
 		WasChild:            d.WasChild,
+		AgeProgressionURLs:  d.AgeProgressionURLs,
 		Slug:                d.Slug,
 		NameLowercase:       d.NameLowercase,
 		Timestamps: missing.Timestamps{

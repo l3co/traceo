@@ -33,6 +33,7 @@ type Missing struct {
 	TattooDescription   string
 	ScarDescription     string
 	WasChild            bool
+	AgeProgressionURLs  []string
 	Slug                string
 	NameLowercase       string
 	Timestamps

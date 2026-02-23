@@ -38,7 +38,7 @@ type mockNotifier struct {
 	calls int
 }
 
-func (m *mockNotifier) NotifySighting(_ context.Context, _, _ string) error   { return nil }
+func (m *mockNotifier) NotifySighting(_ context.Context, _, _ string) error { return nil }
 func (m *mockNotifier) NotifyNewHomeless(_ context.Context, _, _, _, _ string) error {
 	return nil
 }
@@ -165,7 +165,7 @@ func TestProcessFaceMatching_NoPhoto(t *testing.T) {
 	hRepo := &mockHomelessRepo{items: []*homeless.Homeless{
 		{ID: "h1", Name: "Carlos", Gender: shared.GenderMale},
 	}}
-	svc := matching.NewService(&mockMissingRepo{}, hRepo, &mockMatchRepo{}, &mockComparer{score: 0.9}, nil)
+	svc := matching.NewService(&mockMissingRepo{}, hRepo, &mockMatchRepo{}, &mockComparer{score: 0.9}, nil, nil)
 
 	err := svc.ProcessFaceMatching(context.Background(), "h1")
 	require.NoError(t, err)
@@ -180,7 +180,7 @@ func TestProcessFaceMatching_ScoreBelow06_NoMatch(t *testing.T) {
 	}}
 	matchRepo := &mockMatchRepo{}
 
-	svc := matching.NewService(mRepo, hRepo, matchRepo, &mockComparer{score: 0.4}, nil)
+	svc := matching.NewService(mRepo, hRepo, matchRepo, &mockComparer{score: 0.4}, nil, nil)
 
 	err := svc.ProcessFaceMatching(context.Background(), "h1")
 	require.NoError(t, err)
@@ -196,7 +196,7 @@ func TestProcessFaceMatching_Score06_SavesMatch(t *testing.T) {
 	}}
 	matchRepo := &mockMatchRepo{}
 
-	svc := matching.NewService(mRepo, hRepo, matchRepo, &mockComparer{score: 0.7}, nil)
+	svc := matching.NewService(mRepo, hRepo, matchRepo, &mockComparer{score: 0.7}, nil, nil)
 
 	err := svc.ProcessFaceMatching(context.Background(), "h1")
 	require.NoError(t, err)
@@ -214,7 +214,7 @@ func TestProcessFaceMatching_Score08_NotifiesAndSaves(t *testing.T) {
 	matchRepo := &mockMatchRepo{}
 	notifier := &mockNotifier{}
 
-	svc := matching.NewService(mRepo, hRepo, matchRepo, &mockComparer{score: 0.85}, notifier)
+	svc := matching.NewService(mRepo, hRepo, matchRepo, &mockComparer{score: 0.85}, nil, notifier)
 
 	err := svc.ProcessFaceMatching(context.Background(), "h1")
 	require.NoError(t, err)
@@ -228,7 +228,7 @@ func TestProcessFaceMatching_Score08_NotifiesAndSaves(t *testing.T) {
 
 func TestProcessFaceMatching_HomelessNotFound(t *testing.T) {
 	hRepo := &mockHomelessRepo{}
-	svc := matching.NewService(&mockMissingRepo{}, hRepo, &mockMatchRepo{}, &mockComparer{}, nil)
+	svc := matching.NewService(&mockMissingRepo{}, hRepo, &mockMatchRepo{}, &mockComparer{}, nil, nil)
 
 	err := svc.ProcessFaceMatching(context.Background(), "nonexistent")
 	assert.Error(t, err)
@@ -238,7 +238,7 @@ func TestUpdateStatus_Valid(t *testing.T) {
 	matchRepo := &mockMatchRepo{items: []*matching.Match{
 		{ID: "match-1", Status: matching.MatchStatusPending},
 	}}
-	svc := matching.NewService(nil, nil, matchRepo, nil, nil)
+	svc := matching.NewService(nil, nil, matchRepo, nil, nil, nil)
 
 	err := svc.UpdateStatus(context.Background(), "match-1", matching.MatchStatusConfirmed)
 	require.NoError(t, err)
@@ -246,7 +246,7 @@ func TestUpdateStatus_Valid(t *testing.T) {
 }
 
 func TestUpdateStatus_InvalidStatus(t *testing.T) {
-	svc := matching.NewService(nil, nil, &mockMatchRepo{}, nil, nil)
+	svc := matching.NewService(nil, nil, &mockMatchRepo{}, nil, nil, nil)
 
 	err := svc.UpdateStatus(context.Background(), "match-1", "invalid")
 	assert.ErrorIs(t, err, matching.ErrInvalidMatch)

@@ -244,6 +244,21 @@
     "terms": "Termos de Uso",
     "privacy": "Privacidade"
   },
+  "choice": {
+    "title": "Como podemos ajudar?",
+    "subtitle": "Escolha a opção que melhor descreve sua situação.",
+    "registerMissing": "Registrar pessoa desaparecida",
+    "registerMissingDesc": "Cadastre os dados de um familiar ou conhecido que está desaparecido para que ele possa ser encontrado.",
+    "wantToBeFound": "Quero ser encontrado",
+    "wantToBeFoundDesc": "Se você está em situação de rua e deseja reencontrar sua família, cadastre-se aqui."
+  },
+  "ageProgression": {
+    "title": "Como pode estar hoje",
+    "disclaimer": "Imagem gerada por IA — projeção aproximada.",
+    "original": "Original",
+    "projection": "Projeção",
+    "noData": "Nenhuma projeção disponível ainda."
+  },
   "heatmap": {
     "title": "Mapa de Calor",
     "description": "Áreas com maior concentração de desaparecimentos no Brasil."

@@ -17,6 +17,10 @@ type FaceComparer interface {
 	CompareFaces(ctx context.Context, photo1URL, photo2URL string) (*FaceComparisonResult, error)
 }
 
+type FaceDescriber interface {
+	DescribeFace(ctx context.Context, photoURL string, currentAge int, gender string) (string, error)
+}
+
 type FaceComparisonResult struct {
 	SimilarityScore   float64
 	Analysis          string
@@ -30,6 +34,7 @@ type Service struct {
 	homelessRepo homeless.Repository
 	matchRepo    Repository
 	comparer     FaceComparer
+	describer    FaceDescriber
 	notifier     notification.Notifier
 }
 
@@ -38,6 +43,7 @@ func NewService(
 	homelessRepo homeless.Repository,
 	matchRepo Repository,
 	comparer FaceComparer,
+	describer FaceDescriber,
 	notifier notification.Notifier,
 ) *Service {
 	return &Service{
@@ -45,6 +51,7 @@ func NewService(
 		homelessRepo: homelessRepo,
 		matchRepo:    matchRepo,
 		comparer:     comparer,
+		describer:    describer,
 		notifier:     notifier,
 	}
 }
@@ -152,8 +159,34 @@ func (s *Service) UpdateStatus(ctx context.Context, id string, status MatchStatu
 }
 
 func (s *Service) ProcessAgeProgression(ctx context.Context, missingID, photoURL string, birthDate time.Time) error {
-	slog.Info("age progression not yet implemented",
+	if photoURL == "" {
+		slog.Warn("no photo for age progression", "missing_id", missingID)
+		return nil
+	}
+
+	if s.describer == nil {
+		slog.Warn("face describer not configured, skipping age progression", "missing_id", missingID)
+		return nil
+	}
+
+	currentAge := 0
+	if !birthDate.IsZero() {
+		currentAge = time.Now().Year() - birthDate.Year()
+	}
+
+	description, err := s.describer.DescribeFace(ctx, photoURL, currentAge, "unknown")
+	if err != nil {
+		slog.Error("age progression describe failed",
+			"missing_id", missingID,
+			"error", err.Error(),
+		)
+		return fmt.Errorf("describing face: %w", err)
+	}
+
+	slog.Info("age progression description generated",
 		"missing_id", missingID,
+		"description_length", len(description),
 	)
+
 	return nil
 }

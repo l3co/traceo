@@ -203,6 +203,11 @@ export interface CreateHomelessInput {
   lng: number;
 }
 
+export interface AgeProgressionResponse {
+  missing_id: string;
+  urls: string[];
+}
+
 export interface HomelessStatsResponse {
   total: number;
   by_gender: GenderStatDTO[];
@@ -334,6 +339,13 @@ export const api = {
 
   getHomelessStats: () =>
     request<HomelessStatsResponse>("/api/v1/homeless/stats", { skipAuth: true }),
+
+  // --- Age Progression ---
+
+  getAgeProgression: (missingId: string) =>
+    request<AgeProgressionResponse>(`/api/v1/missing/${missingId}/age-progression`, {
+      skipAuth: true,
+    }),
 
   // --- Matches ---
 

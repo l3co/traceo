@@ -490,6 +490,45 @@ func (h *MissingHandler) Locations(w http.ResponseWriter, r *http.Request) {
 	httputil.JSON(w, http.StatusOK, resp)
 }
 
+// --- Age Progression ---
+
+type AgeProgressionResponse struct {
+	MissingID string   `json:"missing_id"`
+	URLs      []string `json:"urls"`
+}
+
+// @Summary      Obter projeções de idade
+// @Description  Retorna URLs das imagens de age progression geradas por IA
+// @Tags         missing
+// @Produce      json
+// @Param        id  path  string  true  "Missing ID"
+// @Success      200  {object}  AgeProgressionResponse
+// @Failure      404  {object}  httputil.ErrorResponse
+// @Router       /api/v1/missing/{id}/age-progression [get]
+func (h *MissingHandler) GetAgeProgression(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	m, err := h.service.FindByID(r.Context(), id)
+	if err != nil {
+		if errors.Is(err, missing.ErrMissingNotFound) {
+			httputil.Error(w, http.StatusNotFound, "missing not found")
+			return
+		}
+		httputil.Error(w, http.StatusInternalServerError, "failed to find missing")
+		return
+	}
+
+	urls := m.AgeProgressionURLs
+	if urls == nil {
+		urls = []string{}
+	}
+
+	httputil.JSON(w, http.StatusOK, AgeProgressionResponse{
+		MissingID: id,
+		URLs:      urls,
+	})
+}
+
 type UpdateStatusRequest struct {
 	Status string `json:"status" validate:"required"`
 }

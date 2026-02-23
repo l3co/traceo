@@ -99,7 +99,11 @@ func main() {
 		}
 	}
 
-	matchingService := matching.NewService(missingRepo, homelessRepo, matchRepo, faceComparer, notifier)
+	var faceDescriber matching.FaceDescriber
+	if faceComparer != nil {
+		faceDescriber = faceComparer.(*geminiComparer)
+	}
+	matchingService := matching.NewService(missingRepo, homelessRepo, matchRepo, faceComparer, faceDescriber, notifier)
 
 	if faceComparer != nil {
 		aiWorker = worker.NewAIWorker(matchingService, 3)
@@ -160,6 +164,10 @@ type geminiComparer struct {
 
 func newGeminiComparer(client *ai.GeminiClient) *geminiComparer {
 	return &geminiComparer{client: client}
+}
+
+func (g *geminiComparer) DescribeFace(ctx context.Context, photoURL string, currentAge int, gender string) (string, error) {
+	return g.client.DescribeFace(ctx, photoURL, currentAge, gender)
 }
 
 func (g *geminiComparer) CompareFaces(ctx context.Context, photo1URL, photo2URL string) (*matching.FaceComparisonResult, error) {
@@ -236,6 +244,7 @@ func setupRouter(
 		r.Get("/missing/stats", missingHandler.Stats)
 		r.Get("/missing/locations", missingHandler.Locations)
 		r.Get("/missing/{id}", missingHandler.FindByID)
+		r.Get("/missing/{id}/age-progression", missingHandler.GetAgeProgression)
 		r.Get("/missing/{id}/sightings", sightingHandler.FindByMissingID)
 		r.Get("/sightings/{sightingId}", sightingHandler.FindByID)
 
