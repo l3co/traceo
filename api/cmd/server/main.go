@@ -17,11 +17,13 @@ import (
 
 	"github.com/l3co/traceo-api/internal/config"
 	"github.com/l3co/traceo-api/internal/domain/missing"
+	"github.com/l3co/traceo-api/internal/domain/sighting"
 	"github.com/l3co/traceo-api/internal/domain/user"
 	"github.com/l3co/traceo-api/internal/handler"
 	"github.com/l3co/traceo-api/internal/handler/middleware"
 	"github.com/l3co/traceo-api/internal/i18n"
 	"github.com/l3co/traceo-api/internal/infrastructure/firebase"
+	"github.com/l3co/traceo-api/internal/infrastructure/notification"
 
 	_ "github.com/l3co/traceo-api/docs/swagger"
 )
@@ -63,11 +65,21 @@ func main() {
 	missingRepo := firebase.NewMissingRepository(fbClient.Firestore)
 	missingService := missing.NewService(missingRepo)
 
+	var emailSender *notification.EmailSender
+	if cfg.ResendAPIKey != "" {
+		emailSender = notification.NewEmailSender(cfg.ResendAPIKey, cfg.ResendFromEmail)
+	}
+	notifier := notification.NewService(emailSender)
+
+	sightingRepo := firebase.NewSightingRepository(fbClient.Firestore)
+	sightingService := sighting.NewService(sightingRepo, missingRepo, notifier)
+
 	userHandler := handler.NewUserHandler(userService)
 	authHandler := handler.NewAuthHandler(userService)
 	missingHandler := handler.NewMissingHandler(missingService)
+	sightingHandler := handler.NewSightingHandler(sightingService)
 
-	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler)
+	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
@@ -120,6 +132,7 @@ func setupRouter(
 	userHandler *handler.UserHandler,
 	authHandler *handler.AuthHandler,
 	missingHandler *handler.MissingHandler,
+	sightingHandler *handler.SightingHandler,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -157,6 +170,8 @@ func setupRouter(
 		r.Get("/missing/stats", missingHandler.Stats)
 		r.Get("/missing/locations", missingHandler.Locations)
 		r.Get("/missing/{id}", missingHandler.FindByID)
+		r.Get("/missing/{id}/sightings", sightingHandler.FindByMissingID)
+		r.Get("/sightings/{sightingId}", sightingHandler.FindByID)
 
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.Auth(authService))
@@ -170,6 +185,8 @@ func setupRouter(
 			r.Put("/missing/{id}", missingHandler.Update)
 			r.Delete("/missing/{id}", missingHandler.Delete)
 			r.Get("/users/{id}/missing", missingHandler.FindByUserID)
+
+			r.Post("/missing/{id}/sightings", sightingHandler.Create)
 		})
 	})
 

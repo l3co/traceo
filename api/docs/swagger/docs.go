@@ -376,6 +376,118 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/missing/{id}/sightings": {
+            "get": {
+                "description": "Retorna todos os avistamentos de uma pessoa desaparecida",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sightings"
+                ],
+                "summary": "Listar avistamentos de um desaparecido",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do desaparecido",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handler.SightingResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Registra um avistamento de pessoa desaparecida",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sightings"
+                ],
+                "summary": "Registrar avistamento",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do desaparecido",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados do avistamento",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.CreateSightingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.SightingResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sightings/{sightingId}": {
+            "get": {
+                "description": "Retorna um avistamento específico",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sightings"
+                ],
+                "summary": "Buscar avistamento por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do avistamento",
+                        "name": "sightingId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.SightingResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users": {
             "post": {
                 "description": "Registra um novo usuário na plataforma",
@@ -747,6 +859,20 @@ const docTemplate = `{
                 }
             }
         },
+        "internal_handler.CreateSightingRequest": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "observation": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_handler.CreateUserRequest": {
             "type": "object",
             "required": [
@@ -942,6 +1068,29 @@ const docTemplate = `{
                 },
                 "was_child": {
                     "type": "boolean"
+                }
+            }
+        },
+        "internal_handler.SightingResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "missing_id": {
+                    "type": "string"
+                },
+                "observation": {
+                    "type": "string"
                 }
             }
         },

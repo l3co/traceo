@@ -12,6 +12,8 @@ type Config struct {
 	AllowedOrigins    []string
 	DefaultLanguage   string
 	FirebaseProjectID string
+	ResendAPIKey      string
+	ResendFromEmail   string
 }
 
 func Load() *Config {
@@ -21,6 +23,8 @@ func Load() *Config {
 		AllowedOrigins:    strings.Split(getEnv("ALLOWED_ORIGINS", "http://localhost:5173"), ","),
 		DefaultLanguage:   getEnv("DEFAULT_LANGUAGE", "pt-BR"),
 		FirebaseProjectID: getEnv("FIREBASE_PROJECT_ID", "traceo-dev"),
+		ResendAPIKey:      getEnv("RESEND_API_KEY", ""),
+		ResendFromEmail:   getEnv("RESEND_FROM_EMAIL", "noreply@traceo.me"),
 	}
 }
 

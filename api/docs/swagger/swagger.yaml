@@ -68,6 +68,15 @@ definitions:
     - name
     - skin
     type: object
+  internal_handler.CreateSightingRequest:
+    properties:
+      lat:
+        type: number
+      lng:
+        type: number
+      observation:
+        type: string
+    type: object
   internal_handler.CreateUserRequest:
     properties:
       accepted_terms:
@@ -199,6 +208,21 @@ definitions:
         type: string
       was_child:
         type: boolean
+    type: object
+  internal_handler.SightingResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      missing_id:
+        type: string
+      observation:
+        type: string
     type: object
   internal_handler.StatsResponse:
     properties:
@@ -485,6 +509,57 @@ paths:
       summary: Atualizar desaparecido
       tags:
       - missing
+  /api/v1/missing/{id}/sightings:
+    get:
+      description: Retorna todos os avistamentos de uma pessoa desaparecida
+      parameters:
+      - description: ID do desaparecido
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handler.SightingResponse'
+            type: array
+      summary: Listar avistamentos de um desaparecido
+      tags:
+      - sightings
+    post:
+      consumes:
+      - application/json
+      description: Registra um avistamento de pessoa desaparecida
+      parameters:
+      - description: ID do desaparecido
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados do avistamento
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CreateSightingRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handler.SightingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Registrar avistamento
+      tags:
+      - sightings
   /api/v1/missing/locations:
     get:
       description: Retorna coordenadas para exibição no mapa
@@ -543,6 +618,29 @@ paths:
       summary: Estatísticas de desaparecidos
       tags:
       - missing
+  /api/v1/sightings/{sightingId}:
+    get:
+      description: Retorna um avistamento específico
+      parameters:
+      - description: ID do avistamento
+        in: path
+        name: sightingId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.SightingResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Buscar avistamento por ID
+      tags:
+      - sightings
   /api/v1/users:
     post:
       consumes:
