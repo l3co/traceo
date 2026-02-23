@@ -47,8 +47,9 @@ services:
       - traceo-net
 
   firebase:
-    image: node:23-alpine
-    working_dir: /firebase
+    build:
+      context: ./firebase
+      dockerfile: Dockerfile
     ports:
       - "4000:4000"
       - "8081:8081"
@@ -58,18 +59,12 @@ services:
       - ./firebase:/firebase
       - firebase-data:/firebase/data
     command: >
-      sh -c "
-        npm install -g firebase-tools &&
-        firebase emulators:start
-          --project traceo-dev
-          --import=/firebase/data
-          --export-on-exit=/firebase/data
-      "
+      firebase emulators:start --project traceo-dev --import=/firebase/data --export-on-exit=/firebase/data
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4000"]
+      test: ["CMD", "curl", "-f", "http://localhost:4000"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
       start_period: 30s
     networks:
       - traceo-net
