@@ -1,0 +1,57 @@
+# ─── System ───────────────────────────────────────
+[HealthOk]
+other = "Service operational"
+
+[StatusOk]
+other = "ok"
+
+# ─── Generic errors ──────────────────────────────
+[ErrInternalServer]
+other = "Internal server error"
+
+[ErrNotFound]
+other = "Resource not found"
+
+[ErrBadRequest]
+other = "Invalid request"
+
+[ErrUnauthorized]
+other = "Unauthorized"
+
+[ErrForbidden]
+other = "Access denied"
+
+[ErrTooManyRequests]
+other = "Too many requests. Please try again shortly."
+
+# ─── Validation ──────────────────────────────────
+[ErrFieldRequired]
+other = "The field '{{.Field}}' is required"
+
+[ErrFieldInvalid]
+other = "The field '{{.Field}}' is invalid"
+
+[ErrFieldTooLong]
+other = "The field '{{.Field}}' exceeds the maximum length"
+
+[ErrFieldTooShort]
+other = "The field '{{.Field}}' is too short"
+
+# ─── User ────────────────────────────────────────
+[ErrEmailAlreadyExists]
+other = "This email is already registered"
+
+[ErrUserNotFound]
+other = "User not found"
+
+[ErrInvalidPassword]
+other = "Invalid password"
+
+[UserCreated]
+other = "User created successfully"
+
+[PasswordChanged]
+other = "Password changed successfully"
+
+[PasswordResetSent]
+other = "Password reset email sent"

@@ -1,0 +1,57 @@
+# ─── Sistema ─────────────────────────────────────
+[HealthOk]
+other = "Serviço operacional"
+
+[StatusOk]
+other = "ok"
+
+# ─── Erros genéricos ─────────────────────────────
+[ErrInternalServer]
+other = "Erro interno do servidor"
+
+[ErrNotFound]
+other = "Recurso não encontrado"
+
+[ErrBadRequest]
+other = "Requisição inválida"
+
+[ErrUnauthorized]
+other = "Não autorizado"
+
+[ErrForbidden]
+other = "Acesso negado"
+
+[ErrTooManyRequests]
+other = "Muitas requisições. Tente novamente em breve."
+
+# ─── Validação ───────────────────────────────────
+[ErrFieldRequired]
+other = "O campo '{{.Field}}' é obrigatório"
+
+[ErrFieldInvalid]
+other = "O campo '{{.Field}}' é inválido"
+
+[ErrFieldTooLong]
+other = "O campo '{{.Field}}' excede o tamanho máximo"
+
+[ErrFieldTooShort]
+other = "O campo '{{.Field}}' é muito curto"
+
+# ─── Usuário ─────────────────────────────────────
+[ErrEmailAlreadyExists]
+other = "Este email já está cadastrado"
+
+[ErrUserNotFound]
+other = "Usuário não encontrado"
+
+[ErrInvalidPassword]
+other = "Senha inválida"
+
+[UserCreated]
+other = "Usuário criado com sucesso"
+
+[PasswordChanged]
+other = "Senha alterada com sucesso"
+
+[PasswordResetSent]
+other = "Email de recuperação enviado"
