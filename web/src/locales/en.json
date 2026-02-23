@@ -162,6 +162,21 @@
   "search": {
     "placeholder": "Search missing persons..."
   },
+  "matches": {
+    "noMatches": "No matches found",
+    "similarity": "similarity",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "rejected": "Rejected",
+    "confirm": "It's them!",
+    "reject": "Not them"
+  },
+  "status": {
+    "markFound": "Mark as found",
+    "reactivate": "Reactivate search",
+    "confirmFound": "Are you sure you want to mark as found?",
+    "confirmReactivate": "Are you sure you want to reactivate the search?"
+  },
   "homeless": {
     "title": "Want To Be Found",
     "register": "New Registration",

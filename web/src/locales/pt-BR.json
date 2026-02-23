@@ -162,6 +162,21 @@
   "search": {
     "placeholder": "Buscar desaparecidos..."
   },
+  "matches": {
+    "noMatches": "Nenhuma correspondência encontrada",
+    "similarity": "similaridade",
+    "pending": "Pendente",
+    "confirmed": "Confirmado",
+    "rejected": "Rejeitado",
+    "confirm": "É ele/ela!",
+    "reject": "Não é"
+  },
+  "status": {
+    "markFound": "Marcar como encontrado",
+    "reactivate": "Reativar busca",
+    "confirmFound": "Tem certeza que deseja marcar como encontrado?",
+    "confirmReactivate": "Tem certeza que deseja reativar a busca?"
+  },
   "homeless": {
     "title": "Quero Ser Encontrado",
     "register": "Novo Cadastro",

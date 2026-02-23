@@ -208,6 +208,17 @@ export interface HomelessStatsResponse {
   by_gender: GenderStatDTO[];
 }
 
+export interface MatchResponse {
+  id: string;
+  homeless_id: string;
+  missing_id: string;
+  score: number;
+  status: string;
+  gemini_analysis?: string;
+  created_at: string;
+  reviewed_at?: string;
+}
+
 export const api = {
   health: () =>
     request<HealthResponse>("/api/v1/health", { skipAuth: true }),
@@ -323,4 +334,26 @@ export const api = {
 
   getHomelessStats: () =>
     request<HomelessStatsResponse>("/api/v1/homeless/stats", { skipAuth: true }),
+
+  // --- Matches ---
+
+  getHomelessMatches: (homelessId: string) =>
+    request<MatchResponse[]>(`/api/v1/homeless/${homelessId}/matches`, { skipAuth: true }),
+
+  getMissingMatches: (missingId: string) =>
+    request<MatchResponse[]>(`/api/v1/missing/${missingId}/matches`, { skipAuth: true }),
+
+  updateMatchStatus: (matchId: string, status: string) =>
+    request<{ status: string }>(`/api/v1/matches/${matchId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    }),
+
+  // --- Missing Status ---
+
+  updateMissingStatus: (missingId: string, status: string) =>
+    request<{ status: string }>(`/api/v1/missing/${missingId}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    }),
 };
