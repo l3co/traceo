@@ -109,8 +109,10 @@ func main() {
 	sightingHandler := handler.NewSightingHandler(sightingService)
 	homelessHandler := handler.NewHomelessHandler(homelessService)
 	matchHandler := handler.NewMatchHandler(matchingService)
+	metaHandler := handler.NewMetaHandler(missingService)
+	sitemapHandler := handler.NewSitemapHandler(missingService, homelessService)
 
-	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler, matchHandler)
+	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler, matchHandler, metaHandler, sitemapHandler)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
@@ -188,6 +190,8 @@ func setupRouter(
 	sightingHandler *handler.SightingHandler,
 	homelessHandler *handler.HomelessHandler,
 	matchHandler *handler.MatchHandler,
+	metaHandler *handler.MetaHandler,
+	sitemapHandler *handler.SitemapHandler,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -213,6 +217,9 @@ func setupRouter(
 	healthHandler := handler.NewHealthHandler()
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
+	r.Get("/robots.txt", metaHandler.RobotsTxt)
+	r.Get("/sitemap.xml", sitemapHandler.Serve)
+	r.Get("/share/missing/{id}", metaHandler.ServeMissingMeta)
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/health", healthHandler.Check)
