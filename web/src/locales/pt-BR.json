@@ -268,6 +268,9 @@
     "noMissing": "Você não possui desaparecidos cadastrados.",
     "noSightings": "Nenhum avistamento registrado para seus desaparecidos."
   },
+  "a11y": {
+    "skipToContent": "Pular para o conteúdo"
+  },
   "errors": {
     "notFoundDescription": "A página que você procura não foi encontrada.",
     "backHome": "Voltar ao início"
