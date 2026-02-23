@@ -324,3 +324,49 @@ func (r *MissingRepository) FindLocations(ctx context.Context, limit int) ([]mis
 	}
 	return result, nil
 }
+
+func (r *MissingRepository) FindCandidates(ctx context.Context, filter missing.CandidateFilter) ([]*missing.Missing, error) {
+	query := r.client.Collection(missingCollection).
+		Where("status", "==", string(filter.Status)).
+		Where("gender", "==", string(filter.Gender)).
+		Where("skin", "==", string(filter.Skin))
+
+	if filter.Limit > 0 {
+		query = query.Limit(filter.Limit)
+	}
+
+	docs, err := query.Documents(ctx).GetAll()
+	if err != nil {
+		return nil, fmt.Errorf("firestore: finding candidates: %w", err)
+	}
+
+	result := make([]*missing.Missing, 0, len(docs))
+	for _, doc := range docs {
+		var d missingDoc
+		if err := doc.DataTo(&d); err != nil {
+			continue
+		}
+		entity := toMissingEntity(d)
+		age := entity.Age()
+		if filter.MinAge > 0 && age < filter.MinAge {
+			continue
+		}
+		if filter.MaxAge > 0 && age > filter.MaxAge {
+			continue
+		}
+		result = append(result, entity)
+	}
+
+	return result, nil
+}
+
+func (r *MissingRepository) UpdateAgeProgressionURLs(ctx context.Context, id string, urls []string) error {
+	_, err := r.client.Collection(missingCollection).Doc(id).Update(ctx, []firestore.Update{
+		{Path: "age_progression_urls", Value: urls},
+		{Path: "updated_at", Value: time.Now()},
+	})
+	if err != nil {
+		return fmt.Errorf("firestore: updating age progression urls for %s: %w", id, err)
+	}
+	return nil
+}

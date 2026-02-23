@@ -191,6 +191,94 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/homeless/{id}/matches": {
+            "get": {
+                "description": "Retorna candidatos de match para um homeless",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "matches"
+                ],
+                "summary": "Listar matches de um homeless",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Homeless ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handler.MatchResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/matches/{id}": {
+            "patch": {
+                "description": "Confirmar ou rejeitar match",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "matches"
+                ],
+                "summary": "Atualizar status do match",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Match ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UpdateMatchStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/missing": {
             "get": {
                 "description": "Retorna lista paginada de desaparecidos (cursor-based)",
@@ -492,6 +580,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/missing/{id}/matches": {
+            "get": {
+                "description": "Retorna matches encontrados para um missing",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "matches"
+                ],
+                "summary": "Listar matches de um desaparecido",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Missing ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handler.MatchResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/missing/{id}/sightings": {
             "get": {
                 "description": "Retorna todos os avistamentos de uma pessoa desaparecida",
@@ -562,6 +682,62 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/missing/{id}/status": {
+            "patch": {
+                "description": "Marca como encontrado ou reativa busca",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Alterar status do desaparecido",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Missing ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UpdateStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
                         }
@@ -1186,6 +1362,35 @@ const docTemplate = `{
                 }
             }
         },
+        "internal_handler.MatchResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "gemini_analysis": {
+                    "type": "string"
+                },
+                "homeless_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "missing_id": {
+                    "type": "string"
+                },
+                "reviewed_at": {
+                    "type": "string"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_handler.MissingListResponse": {
             "type": "object",
             "properties": {
@@ -1329,6 +1534,14 @@ const docTemplate = `{
                 }
             }
         },
+        "internal_handler.UpdateMatchStatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_handler.UpdateMissingRequest": {
             "type": "object",
             "required": [
@@ -1396,6 +1609,17 @@ const docTemplate = `{
                 "tattoo_description": {
                     "type": "string",
                     "maxLength": 500
+                }
+            }
+        },
+        "internal_handler.UpdateStatusRequest": {
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "type": "string"
                 }
             }
         },

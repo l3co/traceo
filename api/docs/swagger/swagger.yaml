@@ -208,6 +208,25 @@ definitions:
           $ref: '#/definitions/internal_handler.LocationPointDTO'
         type: array
     type: object
+  internal_handler.MatchResponse:
+    properties:
+      created_at:
+        type: string
+      gemini_analysis:
+        type: string
+      homeless_id:
+        type: string
+      id:
+        type: string
+      missing_id:
+        type: string
+      reviewed_at:
+        type: string
+      score:
+        type: number
+      status:
+        type: string
+    type: object
   internal_handler.MissingListResponse:
     properties:
       items:
@@ -302,6 +321,11 @@ definitions:
       total:
         type: integer
     type: object
+  internal_handler.UpdateMatchStatusRequest:
+    properties:
+      status:
+        type: string
+    type: object
   internal_handler.UpdateMissingRequest:
     properties:
       birth_date:
@@ -351,6 +375,13 @@ definitions:
     - hair
     - name
     - skin
+    type: object
+  internal_handler.UpdateStatusRequest:
+    properties:
+      status:
+        type: string
+    required:
+    - status
     type: object
   internal_handler.UpdateUserRequest:
     properties:
@@ -498,6 +529,27 @@ paths:
       summary: Buscar morador de rua por ID
       tags:
       - homeless
+  /api/v1/homeless/{id}/matches:
+    get:
+      description: Retorna candidatos de match para um homeless
+      parameters:
+      - description: Homeless ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handler.MatchResponse'
+            type: array
+      summary: Listar matches de um homeless
+      tags:
+      - matches
   /api/v1/homeless/stats:
     get:
       description: Retorna total e distribuição por gênero
@@ -511,6 +563,43 @@ paths:
       summary: Estatísticas de moradores de rua
       tags:
       - homeless
+  /api/v1/matches/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Confirmar ou rejeitar match
+      parameters:
+      - description: Match ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Status
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.UpdateMatchStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Atualizar status do match
+      tags:
+      - matches
   /api/v1/missing:
     get:
       description: Retorna lista paginada de desaparecidos (cursor-based)
@@ -648,6 +737,27 @@ paths:
       summary: Atualizar desaparecido
       tags:
       - missing
+  /api/v1/missing/{id}/matches:
+    get:
+      description: Retorna matches encontrados para um missing
+      parameters:
+      - description: Missing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handler.MatchResponse'
+            type: array
+      summary: Listar matches de um desaparecido
+      tags:
+      - matches
   /api/v1/missing/{id}/sightings:
     get:
       description: Retorna todos os avistamentos de uma pessoa desaparecida
@@ -699,6 +809,43 @@ paths:
       summary: Registrar avistamento
       tags:
       - sightings
+  /api/v1/missing/{id}/status:
+    patch:
+      consumes:
+      - application/json
+      description: Marca como encontrado ou reativa busca
+      parameters:
+      - description: Missing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Status
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.UpdateStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Alterar status do desaparecido
+      tags:
+      - missing
   /api/v1/missing/locations:
     get:
       description: Retorna coordenadas para exibição no mapa

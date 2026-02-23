@@ -17,14 +17,17 @@ import (
 
 	"github.com/l3co/traceo-api/internal/config"
 	"github.com/l3co/traceo-api/internal/domain/homeless"
+	"github.com/l3co/traceo-api/internal/domain/matching"
 	"github.com/l3co/traceo-api/internal/domain/missing"
 	"github.com/l3co/traceo-api/internal/domain/sighting"
 	"github.com/l3co/traceo-api/internal/domain/user"
 	"github.com/l3co/traceo-api/internal/handler"
 	"github.com/l3co/traceo-api/internal/handler/middleware"
 	"github.com/l3co/traceo-api/internal/i18n"
+	"github.com/l3co/traceo-api/internal/infrastructure/ai"
 	"github.com/l3co/traceo-api/internal/infrastructure/firebase"
 	"github.com/l3co/traceo-api/internal/infrastructure/notification"
+	"github.com/l3co/traceo-api/internal/worker"
 
 	_ "github.com/l3co/traceo-api/docs/swagger"
 )
@@ -78,13 +81,36 @@ func main() {
 	homelessRepo := firebase.NewHomelessRepository(fbClient.Firestore)
 	homelessService := homeless.NewService(homelessRepo, notifier)
 
+	matchRepo := firebase.NewMatchRepository(fbClient.Firestore)
+
+	var faceComparer matching.FaceComparer
+	var aiWorker *worker.AIWorker
+	if cfg.GeminiAPIKey != "" {
+		geminiClient, err := ai.NewGeminiClient(ctx, cfg.GeminiAPIKey)
+		if err != nil {
+			slog.Error("failed to initialize gemini client", slog.String("error", err.Error()))
+		} else {
+			defer geminiClient.Close()
+			faceComparer = newGeminiComparer(geminiClient)
+		}
+	}
+
+	matchingService := matching.NewService(missingRepo, homelessRepo, matchRepo, faceComparer, notifier)
+
+	if faceComparer != nil {
+		aiWorker = worker.NewAIWorker(matchingService, 3)
+		defer aiWorker.Shutdown()
+	}
+	_ = aiWorker
+
 	userHandler := handler.NewUserHandler(userService)
 	authHandler := handler.NewAuthHandler(userService)
 	missingHandler := handler.NewMissingHandler(missingService)
 	sightingHandler := handler.NewSightingHandler(sightingService)
 	homelessHandler := handler.NewHomelessHandler(homelessService)
+	matchHandler := handler.NewMatchHandler(matchingService)
 
-	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler)
+	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler, matchHandler)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
@@ -121,6 +147,28 @@ func main() {
 	slog.Info("server stopped gracefully")
 }
 
+type geminiComparer struct {
+	client *ai.GeminiClient
+}
+
+func newGeminiComparer(client *ai.GeminiClient) *geminiComparer {
+	return &geminiComparer{client: client}
+}
+
+func (g *geminiComparer) CompareFaces(ctx context.Context, photo1URL, photo2URL string) (*matching.FaceComparisonResult, error) {
+	result, err := g.client.CompareFaces(ctx, photo1URL, photo2URL)
+	if err != nil {
+		return nil, err
+	}
+	return &matching.FaceComparisonResult{
+		SimilarityScore:   result.SimilarityScore,
+		Analysis:          result.Analysis,
+		MatchingFeatures:  result.MatchingFeatures,
+		DifferentFeatures: result.DifferentFeatures,
+		Confidence:        result.Confidence,
+	}, nil
+}
+
 func setupLogger(cfg *config.Config) {
 	var h slog.Handler
 	if cfg.IsDevelopment() {
@@ -139,6 +187,7 @@ func setupRouter(
 	missingHandler *handler.MissingHandler,
 	sightingHandler *handler.SightingHandler,
 	homelessHandler *handler.HomelessHandler,
+	matchHandler *handler.MatchHandler,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -184,6 +233,9 @@ func setupRouter(
 		r.Get("/homeless/{id}", homelessHandler.FindByID)
 		r.Post("/homeless", homelessHandler.Create)
 
+		r.Get("/homeless/{id}/matches", matchHandler.FindByHomelessID)
+		r.Get("/missing/{id}/matches", matchHandler.FindByMissingID)
+
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.Auth(authService))
 
@@ -198,6 +250,8 @@ func setupRouter(
 			r.Get("/users/{id}/missing", missingHandler.FindByUserID)
 
 			r.Post("/missing/{id}/sightings", sightingHandler.Create)
+			r.Patch("/missing/{id}/status", missingHandler.UpdateStatus)
+			r.Patch("/matches/{id}", matchHandler.UpdateStatus)
 		})
 	})
 

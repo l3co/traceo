@@ -489,3 +489,58 @@ func (h *MissingHandler) Locations(w http.ResponseWriter, r *http.Request) {
 
 	httputil.JSON(w, http.StatusOK, resp)
 }
+
+type UpdateStatusRequest struct {
+	Status string `json:"status" validate:"required"`
+}
+
+// @Summary      Alterar status do desaparecido
+// @Description  Marca como encontrado ou reativa busca
+// @Tags         missing
+// @Accept       json
+// @Produce      json
+// @Param        id    path      string               true  "Missing ID"
+// @Param        body  body      UpdateStatusRequest   true  "Status"
+// @Success      200   {object}  map[string]string
+// @Failure      400   {object}  httputil.ErrorResponse
+// @Failure      404   {object}  httputil.ErrorResponse
+// @Router       /api/v1/missing/{id}/status [patch]
+func (h *MissingHandler) UpdateStatus(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	var req UpdateStatusRequest
+	if err := httputil.DecodeAndValidate(r, &req); err != nil {
+		httputil.Error(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	status := missing.Status(req.Status)
+	if !status.IsValid() {
+		httputil.Error(w, http.StatusBadRequest, "invalid status, use 'disappeared' or 'found'")
+		return
+	}
+
+	existing, err := h.service.FindByID(r.Context(), id)
+	if err != nil {
+		if errors.Is(err, missing.ErrMissingNotFound) {
+			httputil.Error(w, http.StatusNotFound, "missing not found")
+			return
+		}
+		httputil.Error(w, http.StatusInternalServerError, "failed to find missing")
+		return
+	}
+
+	userID := middleware.GetUserID(r.Context())
+	if existing.UserID != userID {
+		httputil.Error(w, http.StatusForbidden, "only the owner can change status")
+		return
+	}
+
+	existing.Status = status
+	if err := h.service.UpdateEntity(r.Context(), existing); err != nil {
+		httputil.Error(w, http.StatusInternalServerError, "failed to update status")
+		return
+	}
+
+	httputil.JSON(w, http.StatusOK, map[string]string{"status": string(status)})
+}
