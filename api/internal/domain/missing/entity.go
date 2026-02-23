@@ -13,11 +13,6 @@ type Timestamps struct {
 	UpdatedAt time.Time
 }
 
-type GeoPoint struct {
-	Lat float64
-	Lng float64
-}
-
 type Missing struct {
 	ID                  string
 	UserID              string
