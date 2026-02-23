@@ -1,0 +1,40 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "retry": "Tentar novamente",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "search": "Buscar",
+    "noResults": "Nenhum resultado encontrado",
+    "language": "Idioma"
+  },
+  "health": {
+    "title": "Status do Sistema",
+    "checking": "Verificando conexão...",
+    "connected": "API conectada",
+    "disconnected": "API desconectada",
+    "uptime": "Tempo ativo",
+    "status": "Status"
+  },
+  "home": {
+    "title": "Traceo",
+    "subtitle": "Plataforma digital para encontrar pessoas desaparecidas no Brasil",
+    "description": "Ajudamos famílias a encontrar seus entes queridos através de uma rede colaborativa de avistamentos e tecnologia de inteligência artificial."
+  },
+  "nav": {
+    "home": "Início",
+    "missing": "Desaparecidos",
+    "sightings": "Avistamentos",
+    "homeless": "Quero ser encontrado",
+    "dashboard": "Dashboard",
+    "login": "Entrar",
+    "register": "Cadastrar",
+    "profile": "Perfil",
+    "logout": "Sair"
+  }
+}

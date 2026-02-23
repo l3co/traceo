@@ -1,0 +1,40 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Try again",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "search": "Search",
+    "noResults": "No results found",
+    "language": "Language"
+  },
+  "health": {
+    "title": "System Status",
+    "checking": "Checking connection...",
+    "connected": "API connected",
+    "disconnected": "API disconnected",
+    "uptime": "Uptime",
+    "status": "Status"
+  },
+  "home": {
+    "title": "Traceo",
+    "subtitle": "Digital platform to find missing persons in Brazil",
+    "description": "We help families find their loved ones through a collaborative network of sightings and artificial intelligence technology."
+  },
+  "nav": {
+    "home": "Home",
+    "missing": "Missing Persons",
+    "sightings": "Sightings",
+    "homeless": "Want to be found",
+    "dashboard": "Dashboard",
+    "login": "Sign in",
+    "register": "Sign up",
+    "profile": "Profile",
+    "logout": "Sign out"
+  }
+}
