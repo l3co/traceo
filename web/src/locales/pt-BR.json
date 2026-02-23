@@ -24,7 +24,31 @@
   "home": {
     "title": "Traceo",
     "subtitle": "Plataforma digital para encontrar pessoas desaparecidas no Brasil",
-    "description": "Ajudamos famílias a encontrar seus entes queridos através de uma rede colaborativa de avistamentos e tecnologia de inteligência artificial."
+    "description": "Ajudamos famílias a encontrar seus entes queridos através de uma rede colaborativa de avistamentos e tecnologia de inteligência artificial.",
+    "hero": {
+      "title": "Encontre quem você procura",
+      "subtitle": "Plataforma colaborativa para localização de pessoas desaparecidas"
+    },
+    "features": {
+      "title": "Funcionalidades",
+      "search": {
+        "title": "Busca Inteligente",
+        "description": "Pesquise por nome, cidade ou características físicas"
+      },
+      "register": {
+        "title": "Cadastro de Desaparecidos",
+        "description": "Registre casos com fotos, descrições e última localização"
+      },
+      "map": {
+        "title": "Mapa de Avistamentos",
+        "description": "Visualize avistamentos em tempo real no mapa interativo"
+      },
+      "notifications": {
+        "title": "Notificações",
+        "description": "Receba alertas quando houver novos avistamentos relevantes"
+      }
+    },
+    "footer": "Traceo — Tecnologia a serviço da reunificação familiar"
   },
   "nav": {
     "home": "Início",
@@ -35,6 +59,106 @@
     "login": "Entrar",
     "register": "Cadastrar",
     "profile": "Perfil",
+    "password": "Alterar Senha",
     "logout": "Sair"
+  },
+  "login": {
+    "title": "Entrar",
+    "email": "Email",
+    "password": "Senha",
+    "submit": "Entrar",
+    "forgotPassword": "Esqueceu a senha?",
+    "register": "Criar conta",
+    "error": "Email ou senha inválidos"
+  },
+  "register": {
+    "title": "Criar Conta",
+    "name": "Nome completo",
+    "email": "Email",
+    "password": "Senha",
+    "phone": "Telefone",
+    "cellPhone": "Celular",
+    "acceptTerms": "Aceito os termos de uso",
+    "submit": "Cadastrar",
+    "hasAccount": "Já tem conta?",
+    "loginLink": "Entrar",
+    "error": "Erro ao criar conta"
+  },
+  "profile": {
+    "title": "Meu Perfil",
+    "personalInfo": "Informações Pessoais",
+    "email": "Email",
+    "name": "Nome",
+    "phone": "Telefone",
+    "cellPhone": "Celular",
+    "save": "Salvar alterações",
+    "success": "Perfil atualizado com sucesso",
+    "error": "Erro ao atualizar perfil",
+    "loadError": "Erro ao carregar perfil"
+  },
+  "password": {
+    "title": "Alterar Senha",
+    "change": "Nova Senha",
+    "new": "Nova senha",
+    "confirm": "Confirmar nova senha",
+    "submit": "Alterar senha",
+    "mismatch": "As senhas não coincidem",
+    "success": "Senha alterada com sucesso",
+    "error": "Erro ao alterar senha"
+  },
+  "forgot": {
+    "title": "Recuperar Senha",
+    "email": "Email",
+    "submit": "Enviar link de recuperação",
+    "sent": "Um email de recuperação foi enviado. Verifique sua caixa de entrada.",
+    "backToLogin": "Voltar para o login",
+    "error": "Erro ao enviar email de recuperação"
+  },
+  "missing": {
+    "listTitle": "Pessoas Desaparecidas",
+    "createTitle": "Cadastrar Desaparecido",
+    "editTitle": "Editar Cadastro",
+    "personalData": "Dados da Pessoa",
+    "register": "Cadastrar",
+    "save": "Salvar",
+    "details": "Ver detalhes",
+    "loadMore": "Carregar mais",
+    "name": "Nome completo",
+    "nickname": "Apelido",
+    "birthDate": "Data de nascimento",
+    "dateOfDisappearance": "Data do desaparecimento",
+    "gender": "Gênero",
+    "eyes": "Olhos",
+    "hair": "Cabelo",
+    "skin": "Pele",
+    "height": "Altura",
+    "clothes": "Roupas no momento",
+    "eventReport": "Boletim de Ocorrência",
+    "tattoo": "Tatuagem",
+    "scar": "Cicatriz",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "location": "Localização",
+    "hasLocation": "Localização registrada",
+    "physicalTraits": "Características Físicas",
+    "distinguishingMarks": "Marcas Distintivas",
+    "wasChild": "Era menor de idade",
+    "age": "Idade",
+    "years": "anos",
+    "disappearedOn": "Desaparecido em",
+    "loadError": "Erro ao carregar dados",
+    "saveError": "Erro ao salvar"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalMissing": "Total de Desaparecidos",
+    "children": "Crianças Desaparecidas",
+    "yearsTracked": "Anos Rastreados",
+    "byGender": "Por Gênero",
+    "byYear": "Por Ano de Desaparecimento",
+    "loadError": "Erro ao carregar estatísticas"
+  },
+  "search": {
+    "placeholder": "Buscar desaparecidos..."
   }
 }

@@ -24,7 +24,31 @@
   "home": {
     "title": "Traceo",
     "subtitle": "Digital platform to find missing persons in Brazil",
-    "description": "We help families find their loved ones through a collaborative network of sightings and artificial intelligence technology."
+    "description": "We help families find their loved ones through a collaborative network of sightings and artificial intelligence technology.",
+    "hero": {
+      "title": "Find who you're looking for",
+      "subtitle": "Collaborative platform for locating missing persons"
+    },
+    "features": {
+      "title": "Features",
+      "search": {
+        "title": "Smart Search",
+        "description": "Search by name, city, or physical characteristics"
+      },
+      "register": {
+        "title": "Missing Person Registry",
+        "description": "Register cases with photos, descriptions, and last known location"
+      },
+      "map": {
+        "title": "Sightings Map",
+        "description": "View real-time sightings on the interactive map"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Get alerts when there are new relevant sightings"
+      }
+    },
+    "footer": "Traceo — Technology in the service of family reunification"
   },
   "nav": {
     "home": "Home",
@@ -35,6 +59,106 @@
     "login": "Sign in",
     "register": "Sign up",
     "profile": "Profile",
+    "password": "Change Password",
     "logout": "Sign out"
+  },
+  "login": {
+    "title": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign In",
+    "forgotPassword": "Forgot password?",
+    "register": "Create account",
+    "error": "Invalid email or password"
+  },
+  "register": {
+    "title": "Create Account",
+    "name": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone",
+    "cellPhone": "Mobile",
+    "acceptTerms": "I accept the terms of use",
+    "submit": "Sign Up",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Sign in",
+    "error": "Failed to create account"
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal Information",
+    "email": "Email",
+    "name": "Name",
+    "phone": "Phone",
+    "cellPhone": "Mobile",
+    "save": "Save changes",
+    "success": "Profile updated successfully",
+    "error": "Failed to update profile",
+    "loadError": "Failed to load profile"
+  },
+  "password": {
+    "title": "Change Password",
+    "change": "New Password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "submit": "Change password",
+    "mismatch": "Passwords do not match",
+    "success": "Password changed successfully",
+    "error": "Failed to change password"
+  },
+  "forgot": {
+    "title": "Reset Password",
+    "email": "Email",
+    "submit": "Send reset link",
+    "sent": "A recovery email has been sent. Check your inbox.",
+    "backToLogin": "Back to sign in",
+    "error": "Failed to send recovery email"
+  },
+  "missing": {
+    "listTitle": "Missing Persons",
+    "createTitle": "Register Missing Person",
+    "editTitle": "Edit Record",
+    "personalData": "Person Details",
+    "register": "Register",
+    "save": "Save",
+    "details": "View details",
+    "loadMore": "Load more",
+    "name": "Full name",
+    "nickname": "Nickname",
+    "birthDate": "Date of birth",
+    "dateOfDisappearance": "Date of disappearance",
+    "gender": "Gender",
+    "eyes": "Eyes",
+    "hair": "Hair",
+    "skin": "Skin",
+    "height": "Height",
+    "clothes": "Clothes at the time",
+    "eventReport": "Police Report",
+    "tattoo": "Tattoo",
+    "scar": "Scar",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "location": "Location",
+    "hasLocation": "Location recorded",
+    "physicalTraits": "Physical Traits",
+    "distinguishingMarks": "Distinguishing Marks",
+    "wasChild": "Was a minor",
+    "age": "Age",
+    "years": "years old",
+    "disappearedOn": "Disappeared on",
+    "loadError": "Failed to load data",
+    "saveError": "Failed to save"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalMissing": "Total Missing",
+    "children": "Missing Children",
+    "yearsTracked": "Years Tracked",
+    "byGender": "By Gender",
+    "byYear": "By Year of Disappearance",
+    "loadError": "Failed to load statistics"
+  },
+  "search": {
+    "placeholder": "Search missing persons..."
   }
 }
