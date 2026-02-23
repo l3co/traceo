@@ -2,32 +2,50 @@ package notification
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 )
 
 type Service struct {
-	email *EmailSender
+	email    *EmailSender
+	telegram *TelegramSender
 }
 
-func NewService(email *EmailSender) *Service {
-	return &Service{email: email}
+func NewService(email *EmailSender, telegram *TelegramSender) *Service {
+	return &Service{email: email, telegram: telegram}
 }
 
-func (s *Service) NotifyPotentialMatch(_ context.Context, missingName string, score float64, analysis string) error {
+func (s *Service) NotifyPotentialMatch(ctx context.Context, missingName string, score float64, analysis string) error {
 	slog.Info("potential match found",
 		"missing_name", missingName,
 		"score", score,
-		"analysis_length", len(analysis),
 	)
+
+	if s.telegram != nil {
+		msg := fmt.Sprintf("🔍 *Possível correspondência!*\n*Nome*: _%s_\n*Score*: %.0f%%\n*Análise*: %s",
+			missingName, score*100, truncate(analysis, 200))
+		if err := s.telegram.SendMessage(ctx, msg); err != nil {
+			slog.Error("telegram notification failed", "error", err.Error())
+		}
+	}
+
 	return nil
 }
 
-func (s *Service) NotifyNewHomeless(_ context.Context, name, birthDate, photoURL, id string) error {
+func (s *Service) NotifyNewHomeless(ctx context.Context, name, birthDate, photoURL, id string) error {
 	slog.Info("new homeless registered",
 		"name", name,
-		"birth_date", birthDate,
 		"id", id,
 	)
+
+	if s.telegram != nil {
+		msg := fmt.Sprintf("🆕 *Novo cadastro*\n*Nome*: _%s_\n*Nascimento*: _%s_\n[Ver perfil](https://traceo.me/homeless/%s)",
+			name, birthDate, id)
+		if err := s.telegram.SendMessage(ctx, msg); err != nil {
+			slog.Error("telegram notification failed", "error", err.Error())
+		}
+	}
+
 	return nil
 }
 
@@ -39,12 +57,29 @@ func (s *Service) NotifySighting(ctx context.Context, userEmail, observation str
 		return err
 	}
 
-	if s.email == nil {
-		slog.Warn("email sender not configured, skipping notification",
+	if s.email != nil {
+		if err := s.email.Send(ctx, userEmail, "Desaparecido foi avistado!", html); err != nil {
+			slog.Error("email notification failed", "error", err.Error())
+		}
+	} else {
+		slog.Warn("email sender not configured, skipping email",
 			"to", userEmail,
 		)
-		return nil
 	}
 
-	return s.email.Send(ctx, userEmail, "Desaparecido foi avistado!", html)
+	if s.telegram != nil {
+		msg := fmt.Sprintf("👁️ *Novo avistamento*\n*Observação*: %s", truncate(observation, 300))
+		if err := s.telegram.SendMessage(ctx, msg); err != nil {
+			slog.Error("telegram notification failed", "error", err.Error())
+		}
+	}
+
+	return nil
+}
+
+func truncate(s string, max int) string {
+	if len(s) <= max {
+		return s
+	}
+	return s[:max] + "..."
 }

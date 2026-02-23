@@ -15,6 +15,8 @@ type Config struct {
 	ResendAPIKey      string
 	ResendFromEmail   string
 	GeminiAPIKey      string
+	TelegramBotToken  string
+	TelegramChatID    string
 }
 
 func Load() *Config {
@@ -27,6 +29,8 @@ func Load() *Config {
 		ResendAPIKey:      getEnv("RESEND_API_KEY", ""),
 		ResendFromEmail:   getEnv("RESEND_FROM_EMAIL", "noreply@traceo.me"),
 		GeminiAPIKey:      getEnv("GEMINI_API_KEY", ""),
+		TelegramBotToken:  getEnv("TELEGRAM_BOT_TOKEN", ""),
+		TelegramChatID:    getEnv("TELEGRAM_CHAT_ID", ""),
 	}
 }
 

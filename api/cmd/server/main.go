@@ -73,7 +73,11 @@ func main() {
 	if cfg.ResendAPIKey != "" {
 		emailSender = notification.NewEmailSender(cfg.ResendAPIKey, cfg.ResendFromEmail)
 	}
-	notifier := notification.NewService(emailSender)
+	var telegramSender *notification.TelegramSender
+	if cfg.TelegramBotToken != "" && cfg.TelegramChatID != "" {
+		telegramSender = notification.NewTelegramSender(cfg.TelegramBotToken, cfg.TelegramChatID)
+	}
+	notifier := notification.NewService(emailSender, telegramSender)
 
 	sightingRepo := firebase.NewSightingRepository(fbClient.Firestore)
 	sightingService := sighting.NewService(sightingRepo, missingRepo, notifier)
