@@ -20,6 +20,29 @@ definitions:
     required:
     - new_password
     type: object
+  internal_handler.CreateHomelessRequest:
+    properties:
+      birth_date:
+        type: string
+      eyes:
+        type: string
+      gender:
+        type: string
+      hair:
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        type: string
+      nickname:
+        type: string
+      photo_url:
+        type: string
+      skin:
+        type: string
+    type: object
   internal_handler.CreateMissingRequest:
     properties:
       birth_date:
@@ -124,6 +147,46 @@ definitions:
         type: string
       uptime:
         type: string
+    type: object
+  internal_handler.HomelessResponse:
+    properties:
+      age:
+        type: integer
+      birth_date:
+        type: string
+      created_at:
+        type: string
+      eyes:
+        type: string
+      gender:
+        type: string
+      hair:
+        type: string
+      id:
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        type: string
+      nickname:
+        type: string
+      photo_url:
+        type: string
+      skin:
+        type: string
+      slug:
+        type: string
+    type: object
+  internal_handler.HomelessStatsResponse:
+    properties:
+      by_gender:
+        items:
+          $ref: '#/definitions/internal_handler.GenderStatDTO'
+        type: array
+      total:
+        type: integer
     type: object
   internal_handler.LocationPointDTO:
     properties:
@@ -372,6 +435,82 @@ paths:
       summary: Health check
       tags:
       - system
+  /api/v1/homeless:
+    get:
+      description: Retorna todos os registros de moradores de rua
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handler.HomelessResponse'
+            type: array
+      summary: Listar moradores de rua
+      tags:
+      - homeless
+    post:
+      consumes:
+      - application/json
+      description: Registra uma pessoa em situação de rua que quer ser encontrada
+      parameters:
+      - description: Dados
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CreateHomelessRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handler.HomelessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Cadastrar morador de rua
+      tags:
+      - homeless
+  /api/v1/homeless/{id}:
+    get:
+      description: Retorna um registro específico
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.HomelessResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Buscar morador de rua por ID
+      tags:
+      - homeless
+  /api/v1/homeless/stats:
+    get:
+      description: Retorna total e distribuição por gênero
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.HomelessStatsResponse'
+      summary: Estatísticas de moradores de rua
+      tags:
+      - homeless
   /api/v1/missing:
     get:
       description: Retorna lista paginada de desaparecidos (cursor-based)

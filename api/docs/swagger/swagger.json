@@ -73,6 +73,122 @@
                 }
             }
         },
+        "/api/v1/homeless": {
+            "get": {
+                "description": "Retorna todos os registros de moradores de rua",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "homeless"
+                ],
+                "summary": "Listar moradores de rua",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handler.HomelessResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Registra uma pessoa em situação de rua que quer ser encontrada",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "homeless"
+                ],
+                "summary": "Cadastrar morador de rua",
+                "parameters": [
+                    {
+                        "description": "Dados",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.CreateHomelessRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.HomelessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/homeless/stats": {
+            "get": {
+                "description": "Retorna total e distribuição por gênero",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "homeless"
+                ],
+                "summary": "Estatísticas de moradores de rua",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.HomelessStatsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/homeless/{id}": {
+            "get": {
+                "description": "Retorna um registro específico",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "homeless"
+                ],
+                "summary": "Buscar morador de rua por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.HomelessResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/missing": {
             "get": {
                 "description": "Retorna lista paginada de desaparecidos (cursor-based)",
@@ -790,6 +906,41 @@
                 }
             }
         },
+        "internal_handler.CreateHomelessRequest": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "eyes": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "hair": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "photo_url": {
+                    "type": "string"
+                },
+                "skin": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_handler.CreateMissingRequest": {
             "type": "object",
             "required": [
@@ -938,6 +1089,67 @@
                 },
                 "uptime": {
                     "type": "string"
+                }
+            }
+        },
+        "internal_handler.HomelessResponse": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "eyes": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "hair": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "photo_url": {
+                    "type": "string"
+                },
+                "skin": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.HomelessStatsResponse": {
+            "type": "object",
+            "properties": {
+                "by_gender": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handler.GenderStatDTO"
+                    }
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },

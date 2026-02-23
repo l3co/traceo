@@ -16,6 +16,7 @@ import (
 	"golang.org/x/time/rate"
 
 	"github.com/l3co/traceo-api/internal/config"
+	"github.com/l3co/traceo-api/internal/domain/homeless"
 	"github.com/l3co/traceo-api/internal/domain/missing"
 	"github.com/l3co/traceo-api/internal/domain/sighting"
 	"github.com/l3co/traceo-api/internal/domain/user"
@@ -74,12 +75,16 @@ func main() {
 	sightingRepo := firebase.NewSightingRepository(fbClient.Firestore)
 	sightingService := sighting.NewService(sightingRepo, missingRepo, notifier)
 
+	homelessRepo := firebase.NewHomelessRepository(fbClient.Firestore)
+	homelessService := homeless.NewService(homelessRepo, notifier)
+
 	userHandler := handler.NewUserHandler(userService)
 	authHandler := handler.NewAuthHandler(userService)
 	missingHandler := handler.NewMissingHandler(missingService)
 	sightingHandler := handler.NewSightingHandler(sightingService)
+	homelessHandler := handler.NewHomelessHandler(homelessService)
 
-	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler)
+	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
@@ -133,6 +138,7 @@ func setupRouter(
 	authHandler *handler.AuthHandler,
 	missingHandler *handler.MissingHandler,
 	sightingHandler *handler.SightingHandler,
+	homelessHandler *handler.HomelessHandler,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -172,6 +178,11 @@ func setupRouter(
 		r.Get("/missing/{id}", missingHandler.FindByID)
 		r.Get("/missing/{id}/sightings", sightingHandler.FindByMissingID)
 		r.Get("/sightings/{sightingId}", sightingHandler.FindByID)
+
+		r.Get("/homeless", homelessHandler.List)
+		r.Get("/homeless/stats", homelessHandler.Stats)
+		r.Get("/homeless/{id}", homelessHandler.FindByID)
+		r.Post("/homeless", homelessHandler.Create)
 
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.Auth(authService))
