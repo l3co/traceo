@@ -18,6 +18,7 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import HeatmapPage from "@/pages/HeatmapPage";
 import NotificationsPage from "@/pages/NotificationsPage";
+import ChoicePage from "@/pages/ChoicePage";
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/homeless" element={<HomelessListPage />} />
           <Route path="/homeless/new" element={<HomelessFormPage />} />
+          <Route path="/register-choice" element={<ChoicePage />} />
           <Route path="/heatmap" element={<HeatmapPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/faq" element={<FaqPage />} />
