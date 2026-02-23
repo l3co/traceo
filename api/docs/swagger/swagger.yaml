@@ -2,6 +2,111 @@ basePath: /api/v1
 consumes:
 - application/json
 definitions:
+  github_com_l3co_traceo-api_pkg_httputil.ErrorResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  internal_handler.ChangePasswordRequest:
+    properties:
+      new_password:
+        maxLength: 100
+        minLength: 6
+        type: string
+    required:
+    - new_password
+    type: object
+  internal_handler.CreateMissingRequest:
+    properties:
+      birth_date:
+        type: string
+      clothes:
+        maxLength: 500
+        type: string
+      date_of_disappearance:
+        type: string
+      event_report:
+        maxLength: 2000
+        type: string
+      eyes:
+        type: string
+      gender:
+        type: string
+      hair:
+        type: string
+      height:
+        maxLength: 20
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        maxLength: 200
+        type: string
+      nickname:
+        maxLength: 100
+        type: string
+      photo_url:
+        type: string
+      scar_description:
+        maxLength: 500
+        type: string
+      skin:
+        type: string
+      tattoo_description:
+        maxLength: 500
+        type: string
+    required:
+    - eyes
+    - gender
+    - hair
+    - name
+    - skin
+    type: object
+  internal_handler.CreateUserRequest:
+    properties:
+      accepted_terms:
+        type: boolean
+      cell_phone:
+        maxLength: 20
+        type: string
+      email:
+        type: string
+      name:
+        maxLength: 150
+        type: string
+      password:
+        maxLength: 100
+        minLength: 6
+        type: string
+      phone:
+        maxLength: 20
+        type: string
+    required:
+    - accepted_terms
+    - email
+    - name
+    - password
+    type: object
+  internal_handler.ForgotPasswordRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  internal_handler.GenderStatDTO:
+    properties:
+      count:
+        type: integer
+      gender:
+        type: string
+    type: object
   internal_handler.HealthResponse:
     properties:
       message:
@@ -11,6 +116,195 @@ definitions:
       uptime:
         type: string
     type: object
+  internal_handler.LocationPointDTO:
+    properties:
+      id:
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        type: string
+      status:
+        type: string
+    type: object
+  internal_handler.LocationsResponse:
+    properties:
+      locations:
+        items:
+          $ref: '#/definitions/internal_handler.LocationPointDTO'
+        type: array
+    type: object
+  internal_handler.MissingListResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/internal_handler.MissingResponse'
+        type: array
+      next_cursor:
+        type: string
+    type: object
+  internal_handler.MissingResponse:
+    properties:
+      age:
+        type: integer
+      birth_date:
+        type: string
+      clothes:
+        type: string
+      created_at:
+        type: string
+      date_of_disappearance:
+        type: string
+      event_report:
+        type: string
+      eyes:
+        type: string
+      gender:
+        type: string
+      hair:
+        type: string
+      has_scar:
+        type: boolean
+      has_tattoo:
+        type: boolean
+      height:
+        type: string
+      id:
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        type: string
+      nickname:
+        type: string
+      photo_url:
+        type: string
+      scar_description:
+        type: string
+      skin:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+      tattoo_description:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+      was_child:
+        type: boolean
+    type: object
+  internal_handler.StatsResponse:
+    properties:
+      by_gender:
+        items:
+          $ref: '#/definitions/internal_handler.GenderStatDTO'
+        type: array
+      by_year:
+        items:
+          $ref: '#/definitions/internal_handler.YearStatDTO'
+        type: array
+      child_count:
+        type: integer
+      total:
+        type: integer
+    type: object
+  internal_handler.UpdateMissingRequest:
+    properties:
+      birth_date:
+        type: string
+      clothes:
+        maxLength: 500
+        type: string
+      date_of_disappearance:
+        type: string
+      event_report:
+        maxLength: 2000
+        type: string
+      eyes:
+        type: string
+      gender:
+        type: string
+      hair:
+        type: string
+      height:
+        maxLength: 20
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+      name:
+        maxLength: 200
+        type: string
+      nickname:
+        maxLength: 100
+        type: string
+      photo_url:
+        type: string
+      scar_description:
+        maxLength: 500
+        type: string
+      skin:
+        type: string
+      status:
+        type: string
+      tattoo_description:
+        maxLength: 500
+        type: string
+    required:
+    - eyes
+    - gender
+    - hair
+    - name
+    - skin
+    type: object
+  internal_handler.UpdateUserRequest:
+    properties:
+      cell_phone:
+        maxLength: 20
+        type: string
+      name:
+        maxLength: 150
+        type: string
+      phone:
+        maxLength: 20
+        type: string
+    required:
+    - name
+    type: object
+  internal_handler.UserResponse:
+    properties:
+      avatar_url:
+        type: string
+      cell_phone:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  internal_handler.YearStatDTO:
+    properties:
+      count:
+        type: integer
+      year:
+        type: integer
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -19,6 +313,28 @@ info:
   title: Traceo API
   version: 0.1.0
 paths:
+  /api/v1/auth/forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Envia email de recuperação de senha
+      parameters:
+      - description: Email do usuário
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.ForgotPasswordRequest'
+      responses:
+        "204":
+          description: Sem conteúdo
+        "400":
+          description: Email inválido
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Recuperar senha
+      tags:
+      - auth
   /api/v1/health:
     get:
       description: Verifica se a API está operacional / Checks if the API is operational
@@ -32,9 +348,384 @@ paths:
       summary: Health check
       tags:
       - system
+  /api/v1/missing:
+    get:
+      description: Retorna lista paginada de desaparecidos (cursor-based)
+      parameters:
+      - default: 20
+        description: Tamanho da página
+        in: query
+        name: size
+        type: integer
+      - description: Cursor para próxima página
+        in: query
+        name: after
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.MissingListResponse'
+      summary: Listar desaparecidos
+      tags:
+      - missing
+    post:
+      consumes:
+      - application/json
+      description: Registra uma nova pessoa desaparecida
+      parameters:
+      - description: Dados do desaparecido
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CreateMissingRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handler.MissingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Cadastrar desaparecido
+      tags:
+      - missing
+  /api/v1/missing/{id}:
+    delete:
+      description: Remove um desaparecido (somente o dono)
+      parameters:
+      - description: ID do desaparecido
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Sem conteúdo
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletar desaparecido
+      tags:
+      - missing
+    get:
+      description: Retorna dados de um desaparecido
+      parameters:
+      - description: ID do desaparecido
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.MissingResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Buscar desaparecido por ID
+      tags:
+      - missing
+    put:
+      consumes:
+      - application/json
+      description: Atualiza dados de um desaparecido (somente o dono)
+      parameters:
+      - description: ID do desaparecido
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados atualizados
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.UpdateMissingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.MissingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Atualizar desaparecido
+      tags:
+      - missing
+  /api/v1/missing/locations:
+    get:
+      description: Retorna coordenadas para exibição no mapa
+      parameters:
+      - default: 100
+        description: Limite
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.LocationsResponse'
+      summary: Localizações de desaparecidos
+      tags:
+      - missing
+  /api/v1/missing/search:
+    get:
+      description: Busca por prefixo no nome
+      parameters:
+      - description: Termo de busca
+        in: query
+        name: q
+        required: true
+        type: string
+      - default: 20
+        description: Limite de resultados
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handler.MissingResponse'
+            type: array
+      summary: Buscar desaparecidos
+      tags:
+      - missing
+  /api/v1/missing/stats:
+    get:
+      description: Retorna totais, por gênero, crianças e por ano (goroutines paralelas)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.StatsResponse'
+      summary: Estatísticas de desaparecidos
+      tags:
+      - missing
+  /api/v1/users:
+    post:
+      consumes:
+      - application/json
+      description: Registra um novo usuário na plataforma
+      parameters:
+      - description: Dados do usuário
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/internal_handler.UserResponse'
+        "400":
+          description: Dados inválidos
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "409":
+          description: Email já existe
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      summary: Criar usuário
+      tags:
+      - users
+  /api/v1/users/{id}:
+    delete:
+      description: Remove o usuário autenticado da plataforma
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Sem conteúdo
+        "403":
+          description: Sem permissão
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "404":
+          description: Usuário não encontrado
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deletar usuário
+      tags:
+      - users
+    get:
+      description: Retorna os dados de um usuário pelo seu ID
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.UserResponse'
+        "404":
+          description: Usuário não encontrado
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Buscar usuário por ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Atualiza os dados do perfil do usuário autenticado
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados atualizados
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.UserResponse'
+        "400":
+          description: Dados inválidos
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "403":
+          description: Sem permissão
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "404":
+          description: Usuário não encontrado
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Atualizar usuário
+      tags:
+      - users
+  /api/v1/users/{id}/missing:
+    get:
+      description: Retorna todos os desaparecidos cadastrados por um usuário
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_handler.MissingResponse'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Listar desaparecidos de um usuário
+      tags:
+      - missing
+  /api/v1/users/{id}/password:
+    patch:
+      consumes:
+      - application/json
+      description: Altera a senha do usuário autenticado
+      parameters:
+      - description: ID do usuário
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Nova senha
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.ChangePasswordRequest'
+      responses:
+        "204":
+          description: Sem conteúdo
+        "400":
+          description: Dados inválidos
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+        "403":
+          description: Sem permissão
+          schema:
+            $ref: '#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Alterar senha
+      tags:
+      - users
 produces:
 - application/json
 schemes:
 - http
 - https
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

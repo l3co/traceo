@@ -19,6 +19,40 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
+        "/api/v1/auth/forgot-password": {
+            "post": {
+                "description": "Envia email de recuperação de senha",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Recuperar senha",
+                "parameters": [
+                    {
+                        "description": "Email do usuário",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.ForgotPasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sem conteúdo"
+                    },
+                    "400": {
+                        "description": "Email inválido",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/health": {
             "get": {
                 "description": "Verifica se a API está operacional / Checks if the API is operational",
@@ -38,9 +72,735 @@
                     }
                 }
             }
+        },
+        "/api/v1/missing": {
+            "get": {
+                "description": "Retorna lista paginada de desaparecidos (cursor-based)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Listar desaparecidos",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Tamanho da página",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cursor para próxima página",
+                        "name": "after",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.MissingListResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Registra uma nova pessoa desaparecida",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Cadastrar desaparecido",
+                "parameters": [
+                    {
+                        "description": "Dados do desaparecido",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.CreateMissingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.MissingResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/missing/locations": {
+            "get": {
+                "description": "Retorna coordenadas para exibição no mapa",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Localizações de desaparecidos",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 100,
+                        "description": "Limite",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.LocationsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/missing/search": {
+            "get": {
+                "description": "Busca por prefixo no nome",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Buscar desaparecidos",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Termo de busca",
+                        "name": "q",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Limite de resultados",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handler.MissingResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/missing/stats": {
+            "get": {
+                "description": "Retorna totais, por gênero, crianças e por ano (goroutines paralelas)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Estatísticas de desaparecidos",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.StatsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/missing/{id}": {
+            "get": {
+                "description": "Retorna dados de um desaparecido",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Buscar desaparecido por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do desaparecido",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.MissingResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Atualiza dados de um desaparecido (somente o dono)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Atualizar desaparecido",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do desaparecido",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados atualizados",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UpdateMissingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.MissingResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove um desaparecido (somente o dono)",
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Deletar desaparecido",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do desaparecido",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sem conteúdo"
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "post": {
+                "description": "Registra um novo usuário na plataforma",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Criar usuário",
+                "parameters": [
+                    {
+                        "description": "Dados do usuário",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Email já existe",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retorna os dados de um usuário pelo seu ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Buscar usuário por ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UserResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Atualiza os dados do perfil do usuário autenticado",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Atualizar usuário",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados atualizados",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Remove o usuário autenticado da plataforma",
+                "tags": [
+                    "users"
+                ],
+                "summary": "Deletar usuário",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sem conteúdo"
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}/missing": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retorna todos os desaparecidos cadastrados por um usuário",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "missing"
+                ],
+                "summary": "Listar desaparecidos de um usuário",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_handler.MissingResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}/password": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Altera a senha do usuário autenticado",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Alterar senha",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do usuário",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Nova senha",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_handler.ChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Sem conteúdo"
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Sem permissão",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_l3co_traceo-api_pkg_httputil.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "github_com_l3co_traceo-api_pkg_httputil.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_handler.ChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "new_password"
+            ],
+            "properties": {
+                "new_password": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 6
+                }
+            }
+        },
+        "internal_handler.CreateMissingRequest": {
+            "type": "object",
+            "required": [
+                "eyes",
+                "gender",
+                "hair",
+                "name",
+                "skin"
+            ],
+            "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "clothes": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "date_of_disappearance": {
+                    "type": "string"
+                },
+                "event_report": {
+                    "type": "string",
+                    "maxLength": 2000
+                },
+                "eyes": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "hair": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "photo_url": {
+                    "type": "string"
+                },
+                "scar_description": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "skin": {
+                    "type": "string"
+                },
+                "tattoo_description": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "internal_handler.CreateUserRequest": {
+            "type": "object",
+            "required": [
+                "accepted_terms",
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "accepted_terms": {
+                    "type": "boolean"
+                },
+                "cell_phone": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 6
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 20
+                }
+            }
+        },
+        "internal_handler.ForgotPasswordRequest": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.GenderStatDTO": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "gender": {
+                    "type": "string"
+                }
+            }
+        },
         "internal_handler.HealthResponse": {
             "type": "object",
             "properties": {
@@ -54,6 +814,294 @@
                     "type": "string"
                 }
             }
+        },
+        "internal_handler.LocationPointDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.LocationsResponse": {
+            "type": "object",
+            "properties": {
+                "locations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handler.LocationPointDTO"
+                    }
+                }
+            }
+        },
+        "internal_handler.MissingListResponse": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handler.MissingResponse"
+                    }
+                },
+                "next_cursor": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.MissingResponse": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "birth_date": {
+                    "type": "string"
+                },
+                "clothes": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "date_of_disappearance": {
+                    "type": "string"
+                },
+                "event_report": {
+                    "type": "string"
+                },
+                "eyes": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "hair": {
+                    "type": "string"
+                },
+                "has_scar": {
+                    "type": "boolean"
+                },
+                "has_tattoo": {
+                    "type": "boolean"
+                },
+                "height": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "photo_url": {
+                    "type": "string"
+                },
+                "scar_description": {
+                    "type": "string"
+                },
+                "skin": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tattoo_description": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                },
+                "was_child": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "internal_handler.StatsResponse": {
+            "type": "object",
+            "properties": {
+                "by_gender": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handler.GenderStatDTO"
+                    }
+                },
+                "by_year": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/internal_handler.YearStatDTO"
+                    }
+                },
+                "child_count": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_handler.UpdateMissingRequest": {
+            "type": "object",
+            "required": [
+                "eyes",
+                "gender",
+                "hair",
+                "name",
+                "skin"
+            ],
+            "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "clothes": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "date_of_disappearance": {
+                    "type": "string"
+                },
+                "event_report": {
+                    "type": "string",
+                    "maxLength": 2000
+                },
+                "eyes": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "hair": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "lat": {
+                    "type": "number"
+                },
+                "lng": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "nickname": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "photo_url": {
+                    "type": "string"
+                },
+                "scar_description": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "skin": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "tattoo_description": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "internal_handler.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "cell_phone": {
+                    "type": "string",
+                    "maxLength": 20
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 150
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 20
+                }
+            }
+        },
+        "internal_handler.UserResponse": {
+            "type": "object",
+            "properties": {
+                "avatar_url": {
+                    "type": "string"
+                },
+                "cell_phone": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_handler.YearStatDTO": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
