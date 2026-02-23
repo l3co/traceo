@@ -34,13 +34,13 @@ export default function App() {
           <Route path="/missing" element={<MissingListPage />} />
           <Route path="/homeless" element={<HomelessListPage />} />
           <Route path="/heatmap" element={<HeatmapPage />} />
-          <Route path="/register-choice" element={<ChoicePage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
 
           {/* Protected routes */}
-          <Route path="/homeless/new" element={<HomelessFormPage />} />
+          <Route path="/register-choice" element={<ProtectedRoute><ChoicePage /></ProtectedRoute>} />
+          <Route path="/homeless/new" element={<ProtectedRoute><HomelessFormPage /></ProtectedRoute>} />
           <Route path="/missing/new" element={<ProtectedRoute><MissingFormPage /></ProtectedRoute>} />
           <Route path="/missing/:id/edit" element={<ProtectedRoute><MissingFormPage /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
