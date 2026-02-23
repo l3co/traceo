@@ -27,6 +27,10 @@ func (m *mockNotifier) NotifySighting(_ context.Context, userEmail, observation 
 	return nil
 }
 
+func (m *mockNotifier) NotifyNewHomeless(_ context.Context, _, _, _, _ string) error {
+	return nil
+}
+
 func (m *mockNotifier) CallCount() int {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -78,16 +82,16 @@ func (m *mockMissingRepo) FindByID(_ context.Context, id string) (*missing.Missi
 	return nil, missing.ErrMissingNotFound
 }
 
-func (m *mockMissingRepo) Create(_ context.Context, mi *missing.Missing) error       { return nil }
-func (m *mockMissingRepo) Update(_ context.Context, mi *missing.Missing) error       { return nil }
-func (m *mockMissingRepo) Delete(_ context.Context, id string) error                 { return nil }
+func (m *mockMissingRepo) Create(_ context.Context, mi *missing.Missing) error { return nil }
+func (m *mockMissingRepo) Update(_ context.Context, mi *missing.Missing) error { return nil }
+func (m *mockMissingRepo) Delete(_ context.Context, id string) error           { return nil }
 func (m *mockMissingRepo) FindByUserID(_ context.Context, uid string) ([]*missing.Missing, error) {
 	return nil, nil
 }
 func (m *mockMissingRepo) FindAll(_ context.Context, opts missing.ListOptions) ([]*missing.Missing, string, error) {
 	return nil, "", nil
 }
-func (m *mockMissingRepo) Count(_ context.Context) (int64, error)               { return 0, nil }
+func (m *mockMissingRepo) Count(_ context.Context) (int64, error) { return 0, nil }
 func (m *mockMissingRepo) Search(_ context.Context, q string, l int) ([]*missing.Missing, error) {
 	return nil, nil
 }
