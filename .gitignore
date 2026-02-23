@@ -1,0 +1,40 @@
+# ─── Go ──────────────────────────────────────────
+api/tmp/
+api/docs/swagger/
+
+# ─── Node ─────────────────────────────────────────
+node_modules/
+web/dist/
+web/.vite/
+
+# ─── Environment ──────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── Firebase ─────────────────────────────────────
+firebase/data/
+firebase/.firebaserc
+
+# ─── Docker ───────────────────────────────────────
+docker-compose.override.yml
+
+# ─── IDE ──────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ─── OS ───────────────────────────────────────────
+Thumbs.db
+
+# ─── Build ────────────────────────────────────────
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
