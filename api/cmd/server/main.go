@@ -111,8 +111,9 @@ func main() {
 	matchHandler := handler.NewMatchHandler(matchingService)
 	metaHandler := handler.NewMetaHandler(missingService)
 	sitemapHandler := handler.NewSitemapHandler(missingService, homelessService)
+	healthHandler := handler.NewHealthHandler(fbClient.Firestore, "1.0.0")
 
-	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler, matchHandler, metaHandler, sitemapHandler)
+	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler, sightingHandler, homelessHandler, matchHandler, metaHandler, sitemapHandler, healthHandler)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
@@ -192,6 +193,7 @@ func setupRouter(
 	matchHandler *handler.MatchHandler,
 	metaHandler *handler.MetaHandler,
 	sitemapHandler *handler.SitemapHandler,
+	healthHandler *handler.HealthHandler,
 ) *chi.Mux {
 	r := chi.NewRouter()
 
@@ -213,8 +215,6 @@ func setupRouter(
 
 	globalLimiter := middleware.NewRateLimiter(rate.Every(time.Second/4), 50) // ~200 req/min
 	r.Use(globalLimiter.Handler)
-
-	healthHandler := handler.NewHealthHandler()
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
 	r.Get("/robots.txt", metaHandler.RobotsTxt)
