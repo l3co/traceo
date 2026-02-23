@@ -65,7 +65,7 @@ make dev
 │         │                  │                    │             │
 │         └──────────────────┼────────────────────┘             │
 │                            │                                  │
-│                     rede: desaparecidos-net                   │
+│                     rede: traceo-net                   │
 └─────────────────────────────────────────────────────────────┘
                              │
                         host machine
@@ -138,7 +138,7 @@ services:
       firebase:
         condition: service_healthy
     networks:
-      - desaparecidos-net
+      - traceo-net
 
   # ─── React com Vite HMR ────────────────────────────
   web:
@@ -152,11 +152,11 @@ services:
       - web-node-modules:/app/node_modules   # evita conflito host vs container
     environment:
       - VITE_API_URL=http://localhost:8080
-      - VITE_FIREBASE_PROJECT_ID=desaparecidos-dev
+      - VITE_FIREBASE_PROJECT_ID=traceo-dev
     depends_on:
       - api
     networks:
-      - desaparecidos-net
+      - traceo-net
 
   # ─── Firebase Emulators ────────────────────────────
   firebase:
@@ -174,7 +174,7 @@ services:
       sh -c "
         npm install -g firebase-tools &&
         firebase emulators:start
-          --project desaparecidos-dev
+          --project traceo-dev
           --import=/firebase/data
           --export-on-exit=/firebase/data
       "
@@ -185,10 +185,10 @@ services:
       retries: 10
       start_period: 15s
     networks:
-      - desaparecidos-net
+      - traceo-net
 
 networks:
-  desaparecidos-net:
+  traceo-net:
     driver: bridge
 
 volumes:
@@ -384,7 +384,7 @@ ENVIRONMENT=development
 PORT=8080
 
 # ─── Firebase ────────────────────────────────────────
-FIREBASE_PROJECT_ID=desaparecidos-dev
+FIREBASE_PROJECT_ID=traceo-dev
 # Em dev, os emulators são usados automaticamente.
 # Em produção, defina o path para o service account:
 # GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
@@ -392,7 +392,7 @@ FIREBASE_PROJECT_ID=desaparecidos-dev
 # ─── Resend (email) ─────────────────────────────────
 # Não obrigatório em dev — emails são logados no console.
 # RESEND_API_KEY=re_xxxxxxxxxxxx
-# RESEND_FROM_EMAIL=noreply@desaparecidos.me
+# RESEND_FROM_EMAIL=noreply@traceo.me
 
 # ─── WhatsApp Business ──────────────────────────────
 # Não obrigatório em dev — notificações são logadas no console.

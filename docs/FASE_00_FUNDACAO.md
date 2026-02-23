@@ -46,7 +46,7 @@ Em Python, você tem `import flask`. Em Go, o sistema é diferente.
 Um **module** é o seu projeto inteiro. Ele é definido pelo arquivo `go.mod`:
 
 ```go
-module github.com/seu-usuario/desaparecidos-api
+module github.com/seu-usuario/traceo-api
 
 go 1.22
 ```
@@ -91,7 +91,7 @@ Na nossa estrutura, o package `handler` vai importar o package `domain/user`:
 ```go
 package handler
 
-import "github.com/seu-usuario/desaparecidos-api/internal/domain/user"
+import "github.com/seu-usuario/traceo-api/internal/domain/user"
 
 func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
     u := user.User{Name: "João"}  // OK — User é exportado
@@ -106,7 +106,7 @@ func (h *UserHandler) Create(w http.ResponseWriter, r *http.Request) {
 Em Go, se você coloca código dentro de `internal/`, **nenhum package externo pode importar esse código**. É uma regra enforçada pelo compilador.
 
 ```
-desaparecidos-api/
+traceo-api/
 ├── cmd/              ← executáveis (main.go)
 ├── internal/         ← código privado do projeto (ninguém de fora importa)
 │   ├── domain/
@@ -318,7 +318,7 @@ export PATH=$PATH:$GOPATH/bin
 ```bash
 mkdir -p desaparecidos/api
 cd desaparecidos/api
-go mod init github.com/seu-usuario/desaparecidos-api
+go mod init github.com/seu-usuario/traceo-api
 ```
 
 Isso cria o `go.mod`. É o equivalente do `package.json` (Node) ou `requirements.txt` (Python).
@@ -534,15 +534,22 @@ A partir da Fase 1, **todo handler novo** deve ter anotações Swagger. Na Fase 
 
 Ao final desta fase, você terá:
 
-- [ ] Monorepo criado com `api/` e `web/`
-- [ ] `go mod init` executado
-- [ ] `main.go` com servidor HTTP rodando na porta 8080
-- [ ] `GET /api/v1/health` retornando `{"status": "ok"}`
-- [ ] Projeto React inicializado com Vite + TypeScript + Tailwind
-- [ ] Página React que chama o health check
-- [ ] Firebase project criado (ou emulators configurados)
-- [ ] Dockerfile funcional para o Go
-- [ ] Swagger (swaggo/swag) configurado — `GET /swagger/*` servindo a UI
+- [x] Monorepo criado com `api/`, `web/`, `shared/`, `firebase/`
+- [x] `go mod init` executado (Go 1.26, Chi, go-i18n, cors, swaggo)
+- [x] `main.go` com servidor HTTP + graceful shutdown + structured logging (slog)
+- [x] `GET /api/v1/health` retornando status i18n (PT-BR e EN via `Accept-Language`)
+- [x] i18n backend: `go-i18n/v2` com arquivos TOML embeddados, middleware `Accept-Language`
+- [x] i18n frontend: `react-i18next` com detecção de idioma do browser + language switcher
+- [x] Projeto React inicializado com Vite + TypeScript + Tailwind v4
+- [x] shadcn/ui configurado (Button, Card, Badge)
+- [x] Página React que chama o health check e alterna idioma
+- [x] Firebase emulators configurados (firebase.json + regras dev)
+- [x] Dockerfile produção (multi-stage, scratch, ~15MB)
+- [x] Dockerfile.dev com Air (hot-reload Go)
+- [x] docker-compose.yml (api + web + firebase emulators)
+- [x] Makefile com comandos padronizados
+- [x] `.env.example` + `.gitignore`
+- [x] Swagger (swaggo/swag) configurado — `GET /swagger/*` servindo a UI
 - [ ] Linting configurado (Go + React)
 
 ---

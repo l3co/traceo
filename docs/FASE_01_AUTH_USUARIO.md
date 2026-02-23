@@ -416,7 +416,7 @@ import (
     "testing"
 
     "github.com/stretchr/testify/assert"
-    "github.com/seu-usuario/desaparecidos-api/internal/domain/user"
+    "github.com/seu-usuario/traceo-api/internal/domain/user"
 )
 
 func TestCreateUser_Success(t *testing.T) {

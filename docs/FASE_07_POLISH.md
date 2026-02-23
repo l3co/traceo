@@ -21,7 +21,7 @@ Esta fase não introduz conceitos novos de Go. O foco é frontend e experiência
 
 ## Por que SEO é crítico neste projeto?
 
-Diferente de um SaaS B2B onde os usuários chegam por convite, o **desaparecidos.me** precisa ser encontrado por:
+Diferente de um SaaS B2B onde os usuários chegam por convite, o **traceo.me** precisa ser encontrado por:
 
 1. **Familiares desesperados** que buscam "pessoa desaparecida [nome] [cidade]" no Google
 2. **Voluntários e ONGs** que buscam "plataforma para registrar moradores de rua"
@@ -65,11 +65,11 @@ func (h *MetaHandler) ServeMissingMeta(w http.ResponseWriter, r *http.Request) {
     <meta property="og:title" content="%s - Desaparecido" />
     <meta property="og:description" content="Desaparecido desde %s. Ajude a encontrar." />
     <meta property="og:image" content="%s" />
-    <meta property="og:url" content="https://desaparecidos.me/missing/%s" />
+    <meta property="og:url" content="https://traceo.me/missing/%s" />
     <meta property="og:type" content="article" />
 </head>
 <body>
-    <script>window.location.href = 'https://desaparecidos.me/missing/%s';</script>
+    <script>window.location.href = 'https://traceo.me/missing/%s';</script>
 </body>
 </html>`, m.Name, m.DateOfDisappearance.Format("02/01/2006"), m.PhotoURL, m.ID, m.ID)
 
@@ -78,7 +78,7 @@ func (h *MetaHandler) ServeMissingMeta(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-Isso garante que ao compartilhar `desaparecidos.me/missing/abc123` no WhatsApp/Facebook, apareça:
+Isso garante que ao compartilhar `traceo.me/missing/abc123` no WhatsApp/Facebook, apareça:
 - **Título**: "João Silva - Desaparecido"
 - **Descrição**: "Desaparecido desde 15/03/2020. Ajude a encontrar."
 - **Imagem**: Foto do desaparecido
@@ -110,14 +110,14 @@ func (h *SitemapHandler) Serve(w http.ResponseWriter, r *http.Request) {
 
     var urls []SitemapURL
     // Páginas estáticas
-    urls = append(urls, SitemapURL{Loc: "https://desaparecidos.me/", Priority: "1.0"})
-    urls = append(urls, SitemapURL{Loc: "https://desaparecidos.me/faq", Priority: "0.5"})
-    urls = append(urls, SitemapURL{Loc: "https://desaparecidos.me/missing", Priority: "0.9"})
+    urls = append(urls, SitemapURL{Loc: "https://traceo.me/", Priority: "1.0"})
+    urls = append(urls, SitemapURL{Loc: "https://traceo.me/faq", Priority: "0.5"})
+    urls = append(urls, SitemapURL{Loc: "https://traceo.me/missing", Priority: "0.9"})
 
     // Desaparecidos individuais
     for _, m := range missing {
         urls = append(urls, SitemapURL{
-            Loc:     fmt.Sprintf("https://desaparecidos.me/missing/%s", m.ID),
+            Loc:     fmt.Sprintf("https://traceo.me/missing/%s", m.ID),
             LastMod: m.UpdatedAt.Format("2006-01-02"),
             Priority: "0.8",
         })
@@ -136,7 +136,7 @@ GET /robots.txt
 
 User-agent: *
 Allow: /
-Sitemap: https://desaparecidos.me/sitemap.xml
+Sitemap: https://traceo.me/sitemap.xml
 ```
 
 ### Frontend (React)
@@ -169,7 +169,7 @@ import { Helmet } from 'react-helmet-async'
 export function Head({ title, description, image }: HeadProps) {
     return (
         <Helmet>
-            <title>{title} | Desaparecidos.me</title>
+            <title>{title} | Traceo</title>
             <meta name="description" content={description} />
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
@@ -204,8 +204,8 @@ function MissingListPage() {
 
 ```json
 {
-    "name": "Desaparecidos.me",
-    "short_name": "Desaparecidos",
+    "name": "Traceo",
+    "short_name": "Traceo",
     "description": "Plataforma para encontrar pessoas desaparecidas",
     "start_url": "/",
     "display": "standalone",

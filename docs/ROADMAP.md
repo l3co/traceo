@@ -1,4 +1,4 @@
-# Desaparecidos.me — Roadmap de Reconstrução
+# Traceo — Roadmap de Reconstrução
 
 > **De**: Flask + MongoDB → **Para**: Go + React + Firestore + Cloud Run
 
@@ -20,7 +20,7 @@ Os detalhes de implementação, tarefas, e conceitos de Go estão nos arquivos d
 
 ### 1.1 O que a plataforma faz
 
-A **desaparecidos.me** é uma plataforma social para localização de pessoas desaparecidas no Brasil. Tem quatro funcionalidades principais:
+O **Traceo** é uma plataforma social para localização de pessoas desaparecidas no Brasil. Tem quatro funcionalidades principais:
 
 - **Cadastro de desaparecidos** — um familiar se registra, cadastra dados da pessoa desaparecida (foto, características, local) e pode ser notificado se alguém avistar a pessoa.
 - **Avistamento** — qualquer pessoa pode informar onde viu alguém desaparecido, marcando no mapa e adicionando uma observação.
@@ -166,7 +166,11 @@ Não é um domínio, é um **serviço de infraestrutura** que atravessa todos os
 | **Email** | Resend | Moderno, DX superior, React Email para templates |
 | **WhatsApp** | WhatsApp Business API | Canal principal para familiares brasileiros |
 | **Auth** | Firebase Auth | JWT, seguro, OAuth futuro |
+| **i18n Backend** | go-i18n v2 (TOML, embed FS) | Mensagens da API traduzidas via `Accept-Language` |
+| **i18n Frontend** | react-i18next + i18next-browser-languagedetector | Detecção automática do idioma do browser, fallback PT-BR |
 | **Deploy** | Cloud Run + Firebase Hosting | Serverless |
+
+**Idiomas suportados**: PT-BR (padrão) e EN — desde a Fase 0.
 
 ---
 

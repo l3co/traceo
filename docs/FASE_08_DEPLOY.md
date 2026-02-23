@@ -318,11 +318,11 @@ GitHub Push → Cloud Build → Container Image → Cloud Run
 steps:
   # Build da imagem Docker
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/desaparecidos-api', './api']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/traceo-api', './api']
 
   # Push para o Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/desaparecidos-api']
+    args: ['push', 'gcr.io/$PROJECT_ID/traceo-api']
 
   # Deploy no Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -330,8 +330,8 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'desaparecidos-api'
-      - '--image=gcr.io/$PROJECT_ID/desaparecidos-api'
+      - 'traceo-api'
+      - '--image=gcr.io/$PROJECT_ID/traceo-api'
       - '--region=southamerica-east1'
       - '--platform=managed'
       - '--allow-unauthenticated'
@@ -411,7 +411,7 @@ Expandir `GET /api/v1/health` para verificar dependências:
 > CORS e Security Headers já foram implementados na Fase 1 (ver [SECURITY.md](./SECURITY.md) seções 1.3 e 1.5).
 > Nesta tarefa, revisar configurações para produção.
 
-- Confirmar `AllowedOrigins` para domínio final (`https://desaparecidos.me`)
+- Confirmar `AllowedOrigins` para domínio final (`https://traceo.me`)
 - Revisar CSP no Firebase Hosting headers para o frontend
 - Testar headers com [securityheaders.com](https://securityheaders.com)
 
@@ -456,8 +456,8 @@ Armazenar todas as chaves sensíveis:
 
 #### Tarefa 7.10 — Domínio customizado
 
-- Configurar `desaparecidos.me` no Firebase Hosting (frontend)
-- Configurar `api.desaparecidos.me` no Cloud Run (backend)
+- Configurar `traceo.me` no Firebase Hosting (frontend)
+- Configurar `api.traceo.me` no Cloud Run (backend)
 - SSL automático (Let's Encrypt via Cloud Run / Firebase)
 
 ### Frontend
@@ -483,8 +483,8 @@ firebase init hosting
 
 ```
 # .env.production
-VITE_API_URL=https://api.desaparecidos.me
-VITE_FIREBASE_PROJECT_ID=desaparecidos
+VITE_API_URL=https://api.traceo.me
+VITE_FIREBASE_PROJECT_ID=traceo
 VITE_MAPBOX_TOKEN=pk.xxx
 ```
 

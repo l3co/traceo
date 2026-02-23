@@ -168,7 +168,7 @@ CORS deve ser configurado desde o primeiro handler. Não deixar para a Fase 8.
 AllowedOrigins: []string{"http://localhost:5173"}
 
 // Produção
-AllowedOrigins: []string{"https://desaparecidos.me", "https://www.desaparecidos.me"}
+AllowedOrigins: []string{"https://traceo.me", "https://www.traceo.me"}
 ```
 
 **Regra**: nunca `AllowedOrigins: ["*"]` em produção. Isso permite que qualquer site faça requests à nossa API usando cookies/tokens do usuário.
@@ -508,7 +508,7 @@ A API key do Google Maps é exposta no frontend (inevitável — o JavaScript pr
 
 | Restrição | Configuração | Por quê |
 |---|---|---|
-| **HTTP referrer** | `desaparecidos.me/*`, `localhost:5173/*` | Só aceita requests do nosso domínio |
+| **HTTP referrer** | `traceo.me/*`, `localhost:5173/*` | Só aceita requests do nosso domínio |
 | **API restrictions** | Só Maps JS API, Geocoding, Places | Impede uso da key em outras APIs |
 | **Quotas** | 10.000 loads/dia (Maps JS), 1.000 req/dia (Geocoding) | Cap de custo |
 
@@ -528,7 +528,7 @@ A API key do Google Maps é exposta no frontend (inevitável — o JavaScript pr
 | Ambiente | Key | Restrições |
 |---|---|---|
 | **Development** | `VITE_GOOGLE_MAPS_API_KEY_DEV` | Referrer: `localhost:*` |
-| **Production** | `VITE_GOOGLE_MAPS_API_KEY` | Referrer: `desaparecidos.me/*` |
+| **Production** | `VITE_GOOGLE_MAPS_API_KEY` | Referrer: `traceo.me/*` |
 
 Nunca usar a mesma key em dev e prod. Se a key de dev vazar (commit acidental), a de prod não é afetada.
 
@@ -563,7 +563,7 @@ A key do Gemini é usada **apenas no backend** (Go) — nunca exposta no fronten
 | Proteção | Configuração |
 |---|---|
 | **Secret Manager** | Key no backend, nunca no frontend |
-| **Domain verification** | Resend verifica que só enviamos de `@desaparecidos.me` |
+| **Domain verification** | Resend verifica que só enviamos de `@traceo.me` |
 | **Rate limit de envio** | Máximo 100 emails/hora no código Go |
 | **Template fixo** | Não permitir conteúdo dinâmico arbitrário em emails |
 

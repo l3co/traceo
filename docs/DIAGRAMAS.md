@@ -1,4 +1,4 @@
-# Diagramas — Desaparecidos.me
+# Diagramas — Traceo
 
 > Diagramas em [Mermaid](https://mermaid.js.org/). Renderizam automaticamente no GitHub, GitLab e VS Code (extensão "Markdown Preview Mermaid Support").
 
@@ -872,7 +872,7 @@ sequenceDiagram
     Note over Familiar: Imprime e distribui / compartilha digitalmente
 
     Note over React: QR Code no cartaz aponta para:
-    Note over React: https://desaparecidos.me/missing/{slug}
+    Note over React: https://traceo.me/missing/{slug}
     Note over React: Sempre atualizado (diferente de cartaz estático)
 ```
 
