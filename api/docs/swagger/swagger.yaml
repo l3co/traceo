@@ -1,0 +1,40 @@
+basePath: /api/v1
+consumes:
+- application/json
+definitions:
+  internal_handler.HealthResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+      uptime:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API para a plataforma Traceo — localização de pessoas desaparecidas
+    no Brasil.
+  title: Traceo API
+  version: 0.1.0
+paths:
+  /api/v1/health:
+    get:
+      description: Verifica se a API está operacional / Checks if the API is operational
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_handler.HealthResponse'
+      summary: Health check
+      tags:
+      - system
+produces:
+- application/json
+schemes:
+- http
+- https
+swagger: "2.0"
