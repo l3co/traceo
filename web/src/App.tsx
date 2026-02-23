@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppLayout from "@/shared/components/AppLayout";
+import PublicLayout from "@/shared/components/PublicLayout";
 import ProtectedRoute from "@/shared/components/ProtectedRoute";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
@@ -28,28 +28,26 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        <Route
-          element={
-            <ProtectedRoute>
-              <AppLayout />
-            </ProtectedRoute>
-          }
-        >
+        <Route element={<PublicLayout />}>
+          {/* Public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/missing" element={<MissingListPage />} />
-          <Route path="/missing/new" element={<MissingFormPage />} />
-          <Route path="/missing/:id/edit" element={<MissingFormPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/homeless" element={<HomelessListPage />} />
-          <Route path="/homeless/new" element={<HomelessFormPage />} />
-          <Route path="/register-choice" element={<ChoicePage />} />
           <Route path="/heatmap" element={<HeatmapPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/register-choice" element={<ChoicePage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/password" element={<ChangePasswordPage />} />
+
+          {/* Protected routes */}
+          <Route path="/homeless/new" element={<HomelessFormPage />} />
+          <Route path="/missing/new" element={<ProtectedRoute><MissingFormPage /></ProtectedRoute>} />
+          <Route path="/missing/:id/edit" element={<ProtectedRoute><MissingFormPage /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/password" element={<ProtectedRoute><ChangePasswordPage /></ProtectedRoute>} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

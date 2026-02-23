@@ -11,7 +11,8 @@
     "next": "Next",
     "search": "Search",
     "noResults": "No results found",
-    "language": "Language"
+    "language": "Language",
+    "seeAll": "See all"
   },
   "health": {
     "title": "System Status",
@@ -25,6 +26,7 @@
     "title": "Traceo",
     "subtitle": "Digital platform to find missing persons in Brazil",
     "description": "We help families find their loved ones through a collaborative network of sightings and artificial intelligence technology.",
+    "cta": "Register a person",
     "hero": {
       "title": "Find who you're looking for",
       "subtitle": "Collaborative platform for locating missing persons"
