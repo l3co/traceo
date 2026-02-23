@@ -7,6 +7,10 @@ import { useAuth } from "@/shared/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import MissingCard from "@/features/missing/components/MissingCard";
 import MissingDetailModal from "@/features/missing/components/MissingDetailModal";
+import AdvancedSearchBar from "@/shared/components/AdvancedSearchBar";
+import { useSearchFilter } from "@/shared/hooks/useSearchFilter";
+
+const SEARCH_FIELDS: (keyof MissingResponse)[] = ["name", "nickname", "address"];
 
 export default function MissingListPage() {
   const { t } = useTranslation();
@@ -18,13 +22,18 @@ export default function MissingListPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [selected, setSelected] = useState<MissingResponse | null>(null);
 
+  const { filters, setFilter, reset, filtered, activeCount } = useSearchFilter(
+    items,
+    SEARCH_FIELDS,
+  );
+
   const load = useCallback(async (cursor?: string) => {
     const isMore = !!cursor;
     if (isMore) setLoadingMore(true);
     else setLoading(true);
 
     try {
-      const res = await api.listMissing(20, cursor);
+      const res = await api.listMissing(100, cursor);
       setItems((prev) => (isMore ? [...prev, ...res.items] : res.items));
       setNextCursor(res.next_cursor);
     } catch {
@@ -53,18 +62,35 @@ export default function MissingListPage() {
         )}
       </div>
 
+      <AdvancedSearchBar
+        filters={filters}
+        setFilter={setFilter}
+        reset={reset}
+        activeCount={activeCount}
+        resultCount={filtered.length}
+        showStatus
+      />
+
       {loading ? (
-        <div className="flex justify-center py-12">
-          <p className="text-muted-foreground">{t("common.loading")}</p>
+        <div className="flex justify-center py-16">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+            <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+          </div>
         </div>
-      ) : items.length === 0 ? (
-        <div className="flex justify-center py-12">
-          <p className="text-muted-foreground">{t("common.noResults")}</p>
+      ) : filtered.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <p className="text-muted-foreground text-sm">{t("search.noResults")}</p>
+          {activeCount > 0 && (
+            <Button variant="outline" size="sm" onClick={reset}>
+              {t("search.clearAll")}
+            </Button>
+          )}
         </div>
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {items.map((item) => (
+            {filtered.map((item) => (
               <MissingCard
                 key={item.id}
                 item={item}
@@ -73,7 +99,7 @@ export default function MissingListPage() {
             ))}
           </div>
 
-          {nextCursor && (
+          {nextCursor && activeCount === 0 && (
             <div className="flex justify-center">
               <Button
                 variant="outline"

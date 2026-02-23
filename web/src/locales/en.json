@@ -163,9 +163,6 @@
     "loadError": "Failed to load statistics",
     "totalHomeless": "Homeless People"
   },
-  "search": {
-    "placeholder": "Search missing persons..."
-  },
   "matches": {
     "noMatches": "No matches found",
     "similarity": "similarity",
@@ -269,6 +266,17 @@
     "title": "Sightings",
     "noMissing": "You have no registered missing persons.",
     "noSightings": "No sightings reported for your missing persons."
+  },
+  "search": {
+    "placeholder": "Search by name, nickname or address...",
+    "filters": "Filters",
+    "clearAll": "Clear filters",
+    "noResults": "No results found for the applied filters.",
+    "results": "result(s)",
+    "ageRange": "Age range",
+    "ageMin": "Min.",
+    "ageMax": "Max.",
+    "years": "years"
   },
   "location": {
     "label": "Location",

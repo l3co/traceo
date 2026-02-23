@@ -163,9 +163,6 @@
     "loadError": "Erro ao carregar estatísticas",
     "totalHomeless": "Moradores de Rua"
   },
-  "search": {
-    "placeholder": "Buscar desaparecidos..."
-  },
   "matches": {
     "noMatches": "Nenhuma correspondência encontrada",
     "similarity": "similaridade",
@@ -269,6 +266,17 @@
     "title": "Avistamentos",
     "noMissing": "Você não possui desaparecidos cadastrados.",
     "noSightings": "Nenhum avistamento registrado para seus desaparecidos."
+  },
+  "search": {
+    "placeholder": "Buscar por nome, apelido ou endereço...",
+    "filters": "Filtros",
+    "clearAll": "Limpar filtros",
+    "noResults": "Nenhum resultado encontrado para os filtros aplicados.",
+    "results": "resultado(s)",
+    "ageRange": "Faixa etária",
+    "ageMin": "Mín.",
+    "ageMax": "Máx.",
+    "years": "anos"
   },
   "location": {
     "label": "Localização",
