@@ -13,10 +13,15 @@ import (
 	chimiddleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
+	"golang.org/x/time/rate"
 
 	"github.com/l3co/traceo-api/internal/config"
+	"github.com/l3co/traceo-api/internal/domain/missing"
+	"github.com/l3co/traceo-api/internal/domain/user"
 	"github.com/l3co/traceo-api/internal/handler"
+	"github.com/l3co/traceo-api/internal/handler/middleware"
 	"github.com/l3co/traceo-api/internal/i18n"
+	"github.com/l3co/traceo-api/internal/infrastructure/firebase"
 
 	_ "github.com/l3co/traceo-api/docs/swagger"
 )
@@ -29,6 +34,9 @@ import (
 // @schemes         http https
 // @accept          json
 // @produce         json
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 
 func main() {
 	cfg := config.Load()
@@ -40,7 +48,26 @@ func main() {
 		os.Exit(1)
 	}
 
-	r := setupRouter(cfg)
+	ctx := context.Background()
+	fbClient, err := firebase.NewClient(ctx, cfg.FirebaseProjectID)
+	if err != nil {
+		slog.Error("failed to initialize firebase", slog.String("error", err.Error()))
+		os.Exit(1)
+	}
+	defer fbClient.Close()
+
+	authService := firebase.NewAuthService(fbClient.Auth)
+	userRepo := firebase.NewUserRepository(fbClient.Firestore)
+	userService := user.NewService(userRepo, authService)
+
+	missingRepo := firebase.NewMissingRepository(fbClient.Firestore)
+	missingService := missing.NewService(missingRepo)
+
+	userHandler := handler.NewUserHandler(userService)
+	authHandler := handler.NewAuthHandler(userService)
+	missingHandler := handler.NewMissingHandler(missingService)
+
+	r := setupRouter(cfg, authService, userHandler, authHandler, missingHandler)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,
@@ -67,10 +94,10 @@ func main() {
 	sig := <-quit
 	slog.Info("shutdown signal received", slog.String("signal", sig.String()))
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	if err := server.Shutdown(ctx); err != nil {
+	if err := server.Shutdown(shutdownCtx); err != nil {
 		slog.Error("forced shutdown", slog.String("error", err.Error()))
 	}
 
@@ -78,22 +105,30 @@ func main() {
 }
 
 func setupLogger(cfg *config.Config) {
-	var handler slog.Handler
+	var h slog.Handler
 	if cfg.IsDevelopment() {
-		handler = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
+		h = slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug})
 	} else {
-		handler = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})
+		h = slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo})
 	}
-	slog.SetDefault(slog.New(handler))
+	slog.SetDefault(slog.New(h))
 }
 
-func setupRouter(cfg *config.Config) *chi.Mux {
+func setupRouter(
+	cfg *config.Config,
+	authService *firebase.AuthService,
+	userHandler *handler.UserHandler,
+	authHandler *handler.AuthHandler,
+	missingHandler *handler.MissingHandler,
+) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(chimiddleware.RequestID)
 	r.Use(chimiddleware.RealIP)
 	r.Use(chimiddleware.Logger)
 	r.Use(chimiddleware.Recoverer)
+	r.Use(middleware.SecurityHeaders)
+	r.Use(middleware.BodyLimit(1 << 20)) // 1 MB
 	r.Use(i18n.Middleware)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   cfg.AllowedOrigins,
@@ -104,12 +139,38 @@ func setupRouter(cfg *config.Config) *chi.Mux {
 		MaxAge:           300,
 	}))
 
+	globalLimiter := middleware.NewRateLimiter(rate.Every(time.Second/4), 50) // ~200 req/min
+	r.Use(globalLimiter.Handler)
+
 	healthHandler := handler.NewHealthHandler()
 
 	r.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Get("/health", healthHandler.Check)
+
+		r.Post("/users", userHandler.Create)
+		r.Post("/auth/forgot-password", authHandler.ForgotPassword)
+
+		r.Get("/missing", missingHandler.List)
+		r.Get("/missing/search", missingHandler.Search)
+		r.Get("/missing/stats", missingHandler.Stats)
+		r.Get("/missing/locations", missingHandler.Locations)
+		r.Get("/missing/{id}", missingHandler.FindByID)
+
+		r.Group(func(r chi.Router) {
+			r.Use(middleware.Auth(authService))
+
+			r.Get("/users/{id}", userHandler.FindByID)
+			r.Put("/users/{id}", userHandler.Update)
+			r.Delete("/users/{id}", userHandler.Delete)
+			r.Patch("/users/{id}/password", userHandler.ChangePassword)
+
+			r.Post("/missing", missingHandler.Create)
+			r.Put("/missing/{id}", missingHandler.Update)
+			r.Delete("/missing/{id}", missingHandler.Delete)
+			r.Get("/users/{id}/missing", missingHandler.FindByUserID)
+		})
 	})
 
 	return r

@@ -7,18 +7,20 @@ import (
 )
 
 type Config struct {
-	Port            string
-	Environment     string
-	AllowedOrigins  []string
-	DefaultLanguage string
+	Port              string
+	Environment       string
+	AllowedOrigins    []string
+	DefaultLanguage   string
+	FirebaseProjectID string
 }
 
 func Load() *Config {
 	return &Config{
-		Port:            getEnv("PORT", "8080"),
-		Environment:     getEnv("ENVIRONMENT", "development"),
-		AllowedOrigins:  strings.Split(getEnv("ALLOWED_ORIGINS", "http://localhost:5173"), ","),
-		DefaultLanguage: getEnv("DEFAULT_LANGUAGE", "pt-BR"),
+		Port:              getEnv("PORT", "8080"),
+		Environment:       getEnv("ENVIRONMENT", "development"),
+		AllowedOrigins:    strings.Split(getEnv("ALLOWED_ORIGINS", "http://localhost:5173"), ","),
+		DefaultLanguage:   getEnv("DEFAULT_LANGUAGE", "pt-BR"),
+		FirebaseProjectID: getEnv("FIREBASE_PROJECT_ID", "traceo-dev"),
 	}
 }
 
