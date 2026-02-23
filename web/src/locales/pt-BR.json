@@ -196,5 +196,54 @@
     "submit": "Enviar Avistamento",
     "submitError": "Erro ao registrar avistamento",
     "submitSuccess": "Avistamento registrado com sucesso!"
+  },
+  "faq": {
+    "title": "Perguntas Frequentes",
+    "description": "Respostas para as dúvidas mais comuns sobre o Traceo.",
+    "q1": "O que é o Traceo?",
+    "a1": "O Traceo é uma plataforma gratuita para ajudar a localizar pessoas desaparecidas no Brasil. Utilizamos tecnologia de inteligência artificial para comparar fotos e encontrar possíveis correspondências.",
+    "q2": "Como funciona o cadastro de desaparecidos?",
+    "a2": "Qualquer familiar pode criar uma conta e cadastrar uma pessoa desaparecida com foto, descrição física e local do desaparecimento. A plataforma gera automaticamente projeções de envelhecimento e compara com a base de moradores de rua cadastrados.",
+    "q3": "O serviço é gratuito?",
+    "a3": "Sim, o Traceo é 100% gratuito. Nosso objetivo é reunir famílias, não gerar lucro.",
+    "q4": "Meus dados estão seguros?",
+    "a4": "Sim. Utilizamos criptografia, autenticação segura e seguimos as diretrizes da LGPD. Fotos e dados pessoais são processados exclusivamente para fins de busca e nunca são compartilhados com terceiros.",
+    "q5": "Como posso ajudar?",
+    "a5": "Você pode registrar avistamentos de pessoas que pareçam estar em situação de rua, compartilhar os perfis de desaparecidos nas redes sociais e divulgar a plataforma."
+  },
+  "terms": {
+    "title": "Termos de Uso",
+    "lastUpdated": "Última atualização: fevereiro de 2026",
+    "section1Title": "1. Aceitação dos Termos",
+    "section1Text": "Ao acessar e utilizar o Traceo, você concorda com estes Termos de Uso. Se não concordar, por favor não utilize a plataforma.",
+    "section2Title": "2. Uso da Plataforma",
+    "section2Text": "O Traceo é destinado exclusivamente para auxílio na localização de pessoas desaparecidas. É proibido cadastrar informações falsas, usar a plataforma para fins ilegais ou violar a privacidade de terceiros.",
+    "section3Title": "3. Responsabilidades",
+    "section3Text": "O usuário é responsável pela veracidade das informações cadastradas. O Traceo não se responsabiliza por informações incorretas fornecidas por usuários, mas se reserva o direito de remover conteúdo impróprio.",
+    "section4Title": "4. Propriedade Intelectual",
+    "section4Text": "Todo o conteúdo da plataforma, incluindo código, design e marca, é propriedade do Traceo. Fotos enviadas pelos usuários permanecem de propriedade dos respectivos autores."
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última atualização: fevereiro de 2026",
+    "section1Title": "1. Dados Coletados",
+    "section1Text": "Coletamos: nome, e-mail, telefone (cadastro); nome, foto, descrição física, localização (desaparecidos e moradores de rua); localização e observação (avistamentos).",
+    "section2Title": "2. Finalidade",
+    "section2Text": "Os dados são utilizados exclusivamente para auxiliar na localização de pessoas desaparecidas, incluindo comparação facial por inteligência artificial e notificação de possíveis correspondências.",
+    "section3Title": "3. Compartilhamento",
+    "section3Text": "Não compartilhamos dados pessoais com terceiros. Fotos são processadas pelo Google Gemini (dentro do Google Cloud Platform) exclusivamente para análise facial.",
+    "section4Title": "4. Seus Direitos (LGPD)",
+    "section4Text": "Você tem direito a: acessar seus dados, corrigir informações, excluir sua conta e todos os dados associados, e revogar consentimento a qualquer momento.",
+    "section5Title": "5. Segurança",
+    "section5Text": "Utilizamos criptografia em trânsito (HTTPS), autenticação Firebase, e armazenamento seguro no Google Cloud Platform."
+  },
+  "footer": {
+    "faq": "FAQ",
+    "terms": "Termos de Uso",
+    "privacy": "Privacidade"
+  },
+  "errors": {
+    "notFoundDescription": "A página que você procura não foi encontrada.",
+    "backHome": "Voltar ao início"
   }
 }

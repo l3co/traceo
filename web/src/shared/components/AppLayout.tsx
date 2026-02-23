@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import SearchBar from "@/shared/components/SearchBar";
+import Footer from "@/shared/components/Footer";
 
 const navItems = [
   { path: "/", icon: Home, labelKey: "nav.home" },
@@ -77,6 +78,7 @@ export default function AppLayout() {
         <main className="flex-1 p-6">
           <Outlet />
         </main>
+        <Footer />
       </div>
     </div>
   );

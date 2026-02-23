@@ -196,5 +196,54 @@
     "submit": "Submit Sighting",
     "submitError": "Failed to report sighting",
     "submitSuccess": "Sighting reported successfully!"
+  },
+  "faq": {
+    "title": "FAQ",
+    "description": "Answers to the most common questions about Traceo.",
+    "q1": "What is Traceo?",
+    "a1": "Traceo is a free platform to help locate missing persons in Brazil. We use artificial intelligence to compare photos and find potential matches.",
+    "q2": "How does registering a missing person work?",
+    "a2": "Any family member can create an account and register a missing person with a photo, physical description, and disappearance location. The platform automatically generates age progression images and compares them with registered homeless persons.",
+    "q3": "Is the service free?",
+    "a3": "Yes, Traceo is 100% free. Our goal is to reunite families, not to make profit.",
+    "q4": "Is my data safe?",
+    "a4": "Yes. We use encryption, secure authentication, and follow LGPD guidelines. Photos and personal data are processed exclusively for search purposes and are never shared with third parties.",
+    "q5": "How can I help?",
+    "a5": "You can report sightings of people who appear to be homeless, share missing persons' profiles on social media, and spread the word about the platform."
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "lastUpdated": "Last updated: February 2026",
+    "section1Title": "1. Acceptance of Terms",
+    "section1Text": "By accessing and using Traceo, you agree to these Terms of Use. If you do not agree, please do not use the platform.",
+    "section2Title": "2. Platform Usage",
+    "section2Text": "Traceo is intended exclusively for assisting in locating missing persons. It is prohibited to submit false information, use the platform for illegal purposes, or violate the privacy of others.",
+    "section3Title": "3. Responsibilities",
+    "section3Text": "Users are responsible for the accuracy of submitted information. Traceo is not liable for incorrect information provided by users but reserves the right to remove inappropriate content.",
+    "section4Title": "4. Intellectual Property",
+    "section4Text": "All platform content, including code, design, and branding, is the property of Traceo. Photos uploaded by users remain the property of their respective authors."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: February 2026",
+    "section1Title": "1. Data Collected",
+    "section1Text": "We collect: name, email, phone (registration); name, photo, physical description, location (missing persons and homeless); location and observation (sightings).",
+    "section2Title": "2. Purpose",
+    "section2Text": "Data is used exclusively to assist in locating missing persons, including facial comparison by artificial intelligence and notification of potential matches.",
+    "section3Title": "3. Sharing",
+    "section3Text": "We do not share personal data with third parties. Photos are processed by Google Gemini (within Google Cloud Platform) exclusively for facial analysis.",
+    "section4Title": "4. Your Rights (LGPD)",
+    "section4Text": "You have the right to: access your data, correct information, delete your account and all associated data, and revoke consent at any time.",
+    "section5Title": "5. Security",
+    "section5Text": "We use encryption in transit (HTTPS), Firebase authentication, and secure storage on Google Cloud Platform."
+  },
+  "footer": {
+    "faq": "FAQ",
+    "terms": "Terms of Use",
+    "privacy": "Privacy"
+  },
+  "errors": {
+    "notFoundDescription": "The page you are looking for was not found.",
+    "backHome": "Back to home"
   }
 }
