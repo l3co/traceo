@@ -60,6 +60,8 @@
     "register": "Sign up",
     "profile": "Profile",
     "password": "Change Password",
+    "heatmap": "Heatmap",
+    "notifications": "Sightings",
     "logout": "Sign out"
   },
   "login": {
@@ -241,6 +243,15 @@
     "faq": "FAQ",
     "terms": "Terms of Use",
     "privacy": "Privacy"
+  },
+  "heatmap": {
+    "title": "Heatmap",
+    "description": "Areas with the highest concentration of disappearances in Brazil."
+  },
+  "notifications": {
+    "title": "Sightings",
+    "noMissing": "You have no registered missing persons.",
+    "noSightings": "No sightings reported for your missing persons."
   },
   "errors": {
     "notFoundDescription": "The page you are looking for was not found.",

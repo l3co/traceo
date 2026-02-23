@@ -16,6 +16,8 @@ import FaqPage from "@/pages/FaqPage";
 import TermsPage from "@/pages/TermsPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import HeatmapPage from "@/pages/HeatmapPage";
+import NotificationsPage from "@/pages/NotificationsPage";
 
 export default function App() {
   return (
@@ -39,6 +41,8 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/homeless" element={<HomelessListPage />} />
           <Route path="/homeless/new" element={<HomelessFormPage />} />
+          <Route path="/heatmap" element={<HeatmapPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />

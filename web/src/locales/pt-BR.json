@@ -60,6 +60,8 @@
     "register": "Cadastrar",
     "profile": "Perfil",
     "password": "Alterar Senha",
+    "heatmap": "Mapa de Calor",
+    "notifications": "Avistamentos",
     "logout": "Sair"
   },
   "login": {
@@ -241,6 +243,15 @@
     "faq": "FAQ",
     "terms": "Termos de Uso",
     "privacy": "Privacidade"
+  },
+  "heatmap": {
+    "title": "Mapa de Calor",
+    "description": "Áreas com maior concentração de desaparecimentos no Brasil."
+  },
+  "notifications": {
+    "title": "Avistamentos",
+    "noMissing": "Você não possui desaparecidos cadastrados.",
+    "noSightings": "Nenhum avistamento registrado para seus desaparecidos."
   },
   "errors": {
     "notFoundDescription": "A página que você procura não foi encontrada.",
