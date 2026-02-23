@@ -1,0 +1,76 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./api:/app
+      - go-modules:/go/pkg/mod
+    env_file:
+      - .env
+    environment:
+      - FIRESTORE_EMULATOR_HOST=firebase:8081
+      - FIREBASE_AUTH_EMULATOR_HOST=firebase:9099
+      - STORAGE_EMULATOR_HOST=firebase:9199
+      - ENVIRONMENT=development
+    depends_on:
+      firebase:
+        condition: service_healthy
+    networks:
+      - traceo-net
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./web:/app
+      - web-node-modules:/app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8080
+      - VITE_FIREBASE_PROJECT_ID=traceo-dev
+    depends_on:
+      - api
+    networks:
+      - traceo-net
+
+  firebase:
+    image: node:23-alpine
+    working_dir: /firebase
+    ports:
+      - "4000:4000"
+      - "8081:8081"
+      - "9099:9099"
+      - "9199:9199"
+    volumes:
+      - ./firebase:/firebase
+      - firebase-data:/firebase/data
+    command: >
+      sh -c "
+        npm install -g firebase-tools &&
+        firebase emulators:start
+          --project traceo-dev
+          --import=/firebase/data
+          --export-on-exit=/firebase/data
+      "
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4000"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    networks:
+      - traceo-net
+
+networks:
+  traceo-net:
+    driver: bridge
+
+volumes:
+  go-modules:
+  web-node-modules:
+  firebase-data:
