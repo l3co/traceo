@@ -14,6 +14,7 @@ type Config struct {
 	FirebaseProjectID string
 	ResendAPIKey      string
 	ResendFromEmail   string
+	GeminiAPIKey      string
 }
 
 func Load() *Config {
@@ -25,6 +26,7 @@ func Load() *Config {
 		FirebaseProjectID: getEnv("FIREBASE_PROJECT_ID", "traceo-dev"),
 		ResendAPIKey:      getEnv("RESEND_API_KEY", ""),
 		ResendFromEmail:   getEnv("RESEND_FROM_EMAIL", "noreply@traceo.me"),
+		GeminiAPIKey:      getEnv("GEMINI_API_KEY", ""),
 	}
 }
 
